@@ -2,6 +2,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional, List
 import asyncio
@@ -43,6 +44,17 @@ app.add_middleware(
 
 # Global variables
 research_system = None
+
+# Mount static files (frontend) if they exist
+if os.path.exists("frontend/dist"):
+    app.mount("/static", StaticFiles(directory="frontend/dist", html=True), name="static")
+    
+    # Serve index.html at root path
+    from fastapi.responses import FileResponse
+    
+    @app.get("/")
+    async def read_root():
+        return FileResponse("frontend/dist/index.html")
 
 # Create Socket.IO server
 sio = socketio.AsyncServer(
