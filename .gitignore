@@ -1,13 +1,48 @@
+# Environment variables
 .env
 .env.local
 .env.production
 .env.staging
 *.env
 
+# Python cache and bytecode
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+*.pyo
+*.pyd
 
+# Virtual environment
 research-env/
+venv/
+env/
+
+# Output files
+outputs/
+*.json
+*.txt
+logs/
+*.log
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
