@@ -32,9 +32,10 @@ app = FastAPI(
 )
 
 # Configure CORS
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -46,7 +47,7 @@ research_system = None
 # Create Socket.IO server
 sio = socketio.AsyncServer(
     async_mode='asgi',
-    cors_allowed_origins=["http://localhost:3000", "http://127.0.0.1:3000"]
+    cors_allowed_origins=cors_origins
 )
 
 # Pydantic models for API
@@ -224,18 +225,20 @@ async def internal_error_handler(request, exc):
 if __name__ == "__main__":
     import uvicorn
     
+    port = int(os.getenv("PORT", 8000))
+    host = os.getenv("HOST", "0.0.0.0")
+    
     print("🚀 Starting Enhanced Multi-Agent Research API Server...")
-    print("📡 API will be available at: http://localhost:8000")
-    print("📚 API Documentation: http://localhost:8000/docs")
-    print("🔌 Socket.IO endpoint: http://localhost:8000/socket.io/")
-    print("🎯 Frontend should connect to: http://localhost:3000")
+    print(f"📡 API will be available at: http://{host}:{port}")
+    print(f"📚 API Documentation: http://{host}:{port}/docs")
+    print(f"🔌 Socket.IO endpoint: http://{host}:{port}/socket.io/")
     print("⚡ Features: Rate limiting, progress updates, WebSocket support")
     print("-" * 60)
     
     uvicorn.run(
         "backend_server:app",
-        host="127.0.0.1",
-        port=8000,
-        reload=True,
-        log_level="info"
+        host=host,
+        port=port,
+        reload=os.getenv("ENVIRONMENT") != "production",
+        log_level=os.getenv("LOG_LEVEL", "info").lower()
     )

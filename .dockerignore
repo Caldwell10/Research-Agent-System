@@ -1,0 +1,60 @@
+# Git
+.git
+.gitignore
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node modules
+node_modules
+frontend/node_modules
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+research-env
+venv
+env
+
+# Build outputs
+frontend/dist
+frontend/build
+
+# Logs
+*.log
+logs
+
+# Cache
+.cache
+frontend/.vite
+.parcel-cache
+
+# Test files
+frontend/coverage
+test-results
+playwright-report
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+
+# Outputs (will be mounted as volume)
+outputs
+
+# Documentation
+README.md
+VISUALIZATION_FEATURES.md
+
+# Development files
+.github
