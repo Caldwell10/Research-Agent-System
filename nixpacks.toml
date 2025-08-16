@@ -1,14 +1,14 @@
 [phases.setup]
-nixPkgs = ["nodejs", "python39", "pip"]
+nixPkgs = ["nodejs_18", "python310", "pip"]
 
 [phases.install]
 cmds = [
-    "pip install -r requirements_backend.txt",
-    "cd frontend && npm ci && npm run build"
+    "pip install --no-cache-dir -r requirements_backend.txt",
+    "cd frontend && npm ci --cache /tmp/npm-cache && npm run build"
 ]
 
 [phases.build]
-cmds = ["echo 'Build complete'"]
+cmds = ["echo 'Build complete - Frontend and Backend ready'"]
 
 [start]
 cmd = "uvicorn backend_server:app --host 0.0.0.0 --port $PORT"
