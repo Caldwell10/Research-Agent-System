@@ -2,20 +2,20 @@
 
 A sophisticated research paper analysis system powered by AI agents that can automatically search, analyze, and summarize academic papers from ArXiv with real-time progress tracking and rich visualizations.
 
-## 🚀 Overview
+## Overview
 
 The Multi-Agent Research Tool combines the power of multiple specialized AI agents to provide comprehensive research paper analysis. The system features a React-based frontend with real-time WebSocket communication to a FastAPI backend that orchestrates three distinct AI agents for research, analysis, and reporting.
 
-## 🏗️ System Architecture
+## System Architecture
 
 ### High-Level Architecture
 
 ```
 ┌─────────────────┐    WebSocket/HTTP    ┌─────────────────┐
-│                 │◄──────────────────► │                 │
-│   React Frontend │                     │  FastAPI Backend │
-│                 │                     │                 │
-└─────────────────┘                     └─────────────────┘
+│                 │◄──────────────────►  │                 │
+│ React Frontend  │                      │ FastAPI Backend |
+│                 │                      │                 │
+└─────────────────┘                      └─────────────────┘
                                                  │
                                                  ▼
                                         ┌─────────────────┐
@@ -133,7 +133,7 @@ Frontend                    Backend
 - `GET /research/{id}` - Retrieve research results
 - `GET /research/history` - Get research history
 
-## 🧩 System Design Patterns
+## System Design Patterns
 
 ### 1. **Multi-Agent Architecture**
 - **Pattern**: Agent-based distributed system
@@ -170,7 +170,7 @@ Frontend                    Backend
 - **Implementation**: Research actions and agent commands
 - **Benefits**: Undo/redo functionality and request queuing
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 Multi-agent Research Tool/
@@ -202,7 +202,7 @@ Multi-agent Research Tool/
 └── requirements_backend.txt   # Python dependencies
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -254,7 +254,7 @@ Multi-agent Research Tool/
    ```
    Frontend runs on `http://localhost:3001`
 
-## 🧪 Testing
+## Testing
 
 ### Frontend Testing
 
@@ -283,7 +283,7 @@ The project includes comprehensive testing:
 - **Accessibility Tests**: WCAG compliance testing
 - **Mobile Responsive Tests**: Cross-device compatibility
 
-## 📊 Features
+## Features
 
 ### Core Functionality
 
@@ -303,7 +303,7 @@ The project includes comprehensive testing:
 - **Performance Optimization**: Code splitting, lazy loading, and caching
 - **Error Boundaries**: Graceful error handling and recovery
 
-## 🛠️ Development
+## 🛠Development
 
 ### Available Scripts
 
@@ -326,7 +326,7 @@ The project includes comprehensive testing:
 - **Prettier**: Consistent code formatting
 - **Husky**: Pre-commit hooks for quality gates
 
-## 🏗️ Deployment
+## 🏗Deployment
 
 ### Production Build
 
@@ -358,7 +358,7 @@ VITE_API_URL=http://localhost:8000
 VITE_WS_URL=ws://localhost:8000
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -366,11 +366,8 @@ VITE_WS_URL=ws://localhost:8000
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **ArXiv**: For providing open access to academic papers
 - **Groq**: For high-performance language model API
@@ -378,5 +375,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **FastAPI**: For the modern Python web framework
 
 ---
-
-**Built with ❤️ using Modern Web Technologies**
