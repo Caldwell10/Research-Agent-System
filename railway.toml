@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "uvicorn backend_server:app --host 0.0.0.0 --port $PORT"
+startCommand = "python start.py"
 
 [env]
 NIXPACKS_PYTHON_VERSION = "3.10"
