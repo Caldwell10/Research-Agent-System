@@ -1,3 +1,4 @@
+# agents/reporter.py
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from utils.groq_llm import GroqLLM
@@ -30,46 +31,46 @@ class ReporterAgent:
         
         template = """You are an expert technical writer creating a research literature review.
 
-        Research Query: {research_query}
-        Papers Analyzed: {num_papers}
-        Analysis Date: {date}
+Research Query: {research_query}
+Papers Analyzed: {num_papers}
+Analysis Date: {date}
 
-        Research Data:
-        {research_summary}
+Research Data:
+{research_summary}
 
-        Analysis Results:
-        {analysis_summary}
+Analysis Results:
+{analysis_summary}
 
-        Create a comprehensive research report with the following structure:
+Create a comprehensive research report with the following structure:
 
-        # Literature Review: {research_query}
+# Literature Review: {research_query}
 
-        ## Executive Summary
-        [3-4 sentence overview of the field and key findings]
+## Executive Summary
+[3-4 sentence overview of the field and key findings]
 
-        ## Research Landscape
-        [Overview of the current state of research in this area]
+## Research Landscape
+[Overview of the current state of research in this area]
 
-        ## Key Papers and Contributions
-        [Highlight the most important papers and their contributions]
+## Key Papers and Contributions
+[Highlight the most important papers and their contributions]
 
-        ## Methodological Approaches
-        [Summary of the main methods and techniques being used]
+## Methodological Approaches
+[Summary of the main methods and techniques being used]
 
-        ## Current Trends and Patterns
-        [What trends are emerging in the research]
+## Current Trends and Patterns
+[What trends are emerging in the research]
 
-        ## Research Gaps and Opportunities
-        [What questions remain unanswered and where future research should focus]
+## Research Gaps and Opportunities
+[What questions remain unanswered and where future research should focus]
 
-        ## Technical Recommendations
-        [Specific recommendations for researchers or practitioners]
+## Technical Recommendations
+[Specific recommendations for researchers or practitioners]
 
-        ## Conclusion
-        [Synthesis of findings and future outlook]
+## Conclusion
+[Synthesis of findings and future outlook]
 
-        Write in a clear, professional academic style. Include specific details and insights from the analysis.
-        Make it useful for researchers, students, and practitioners in the field."""
+Write in a clear, professional academic style. Include specific details and insights from the analysis.
+Make it useful for researchers, students, and practitioners in the field."""
 
         prompt = PromptTemplate(
             input_variables=["research_query", "num_papers", "date", "research_summary", "analysis_summary"],
@@ -83,19 +84,19 @@ class ReporterAgent:
         
         template = """Create a concise executive summary for busy researchers and decision-makers.
 
-        Research Topic: {research_query}
-        Key Findings: {key_findings}
+Research Topic: {research_query}
+Key Findings: {key_findings}
 
-        Create a 2-3 paragraph executive summary that covers:
+Create a 2-3 paragraph executive summary that covers:
 
-        1. WHAT: What research area was analyzed and why it matters
-        2. HOW: Brief overview of the analysis approach  
-        3. KEY FINDINGS: The most important discoveries and insights
-        4. SO WHAT: Why these findings matter and what should be done next
+1. WHAT: What research area was analyzed and why it matters
+2. HOW: Brief overview of the analysis approach  
+3. KEY FINDINGS: The most important discoveries and insights
+4. SO WHAT: Why these findings matter and what should be done next
 
-        Write for an audience of researchers, funding agencies, and tech leaders who need to quickly understand the current state and future directions of this research area.
+Write for an audience of researchers, funding agencies, and tech leaders who need to quickly understand the current state and future directions of this research area.
 
-        Keep it concise but informative - someone should be able to read this in 2 minutes and understand the essential points."""
+Keep it concise but informative - someone should be able to read this in 2 minutes and understand the essential points."""
 
         prompt = PromptTemplate(
             input_variables=["research_query", "key_findings"],
@@ -115,33 +116,33 @@ class ReporterAgent:
         Returns:
             Dictionary with complete report and metadata
         """
-        logger.info(" Reporter Agent generating comprehensive report...")
-
+        logger.info("📝 Reporter Agent generating comprehensive report...")
+        
         try:
-            # Prepare data for report generation 
-            research_query = research_results['query', 'Unknown']
-            num_papers = len(research_results['papers'])
+            # Prepare data for report generation
+            research_query = research_results.get('query', 'Unknown')
+            num_papers = len(research_results.get('papers', []))
             
             # Create summaries for the report
-            research_summary = self.create_research_summary(research_results)
-            analysis_summary = self.create_analysis_summary(analysis_results)
-
-            # Generate the main report
+            research_summary = self._create_research_summary(research_results)
+            analysis_summary = self._create_analysis_summary(analysis_results)
+            
+            # Generate main report
             report_content = self.report_chain.run(
                 research_query=research_query,
                 num_papers=num_papers,
-                date=datetime.now().strftime('%Y-%m-%d'),
+                date=datetime.now().strftime("%Y-%m-%d"),
                 research_summary=research_summary,
                 analysis_summary=analysis_summary
             )
             
-            # Generate an executive summary
-            key_findings = self.extract_key_findings(analysis_results)
+            # Generate executive summary
+            key_findings = self._extract_key_findings(analysis_results)
             executive_summary = self.summary_chain.run(
                 research_query=research_query,
                 key_findings=key_findings
             )
-
+            
             # Create structured report
             report = {
                 "metadata": {
@@ -164,13 +165,14 @@ class ReporterAgent:
                 "recommendations": self._generate_recommendations(analysis_results),
                 "status": "success"
             }
+            
             # Save report to file
-            report_filename = self.save_report(report)
-            report["saved to"] = report_filename
-
+            report_filename = self._save_report(report)
+            report["saved_to"] = report_filename
+            
             logger.info(f"✅ Report generated successfully: {report_filename}")
             return report
-        
+            
         except Exception as e:
             logger.error(f"Error generating report: {e}")
             return {
@@ -178,9 +180,10 @@ class ReporterAgent:
                 "message": str(e),
                 "metadata": {
                     "research_query": research_results.get('query', 'Unknown'),
-                    "generated_date": datetime.now().isoformat(),
+                    "generated_date": datetime.now().isoformat()
                 }
             }
+    
     def _create_research_summary(self, research_results: Dict) -> str:
         """Create summary of research findings"""
         
@@ -205,15 +208,15 @@ class ReporterAgent:
     
     def _create_analysis_summary(self, analysis_results: Dict) -> str:
         """Create summary of analysis findings"""
-
+        
         if analysis_results.get('status') != 'success':
-            return "Analysis could not be completed successfully."
+            return "Analysis could not be completed."
         
         summary_parts = []
-
+        
         # Analysis overview
         summary_parts.append(f"Analyzed {analysis_results.get('papers_analyzed', 0)} papers in detail")
-
+        
         # Key insights
         insights = analysis_results.get('insights', {})
         if insights.get('trending_methods'):
@@ -225,29 +228,31 @@ class ReporterAgent:
             summary_parts.append("\nKey contributions:")
             for contrib in insights['top_contributions'][:3]:
                 summary_parts.append(f"- {contrib}")
-
+        
         return "\n".join(summary_parts)
     
-    def extract_key_findings(self, analysis_results: Dict) -> str:
+    def _extract_key_findings(self, analysis_results: Dict) -> str:
         """Extract key findings for executive summary"""
+        
         if analysis_results.get('status') != 'success':
-            return "Analysis not completed successfully."
+            return "Analysis incomplete"
         
         findings = []
-
+        
+        # From comparative analysis
         comp_analysis = analysis_results.get('comparative_analysis', {})
         if comp_analysis.get('comparison_text'):
-            # Extract first few senteneces as key findings
+            # Extract first few sentences as key findings
             text = comp_analysis['comparison_text']
-            sentences = text.split('. ')[:3]
+            sentences = text.split('.')[:3]  # First 3 sentences
             findings.extend([s.strip() + '.' for s in sentences if s.strip()])
         
-        # From insights 
+        # From insights
         insights = analysis_results.get('insights', {})
         if insights.get('trending_methods'):
-            findings.append("Trending methods: " + ", ".join(insights['trending_methods'][:2]))
-
-        return ''.join(findings) 
+            findings.append(f"Trending approaches: {', '.join(insights['trending_methods'][:2])}")
+        
+        return ' '.join(findings)
     
     def _generate_recommendations(self, analysis_results: Dict) -> List[str]:
         """Generate actionable recommendations"""
@@ -306,16 +311,45 @@ class ReporterAgent:
             logger.error(f"Error saving report: {e}")
             return f"Error saving: {e}"
     
-    if __name__ == "__main__":
-        import sys
-        from pathlib import Path
+    def _save_readable_report(self, report: Dict, filename: str):
+        """Save a human-readable text version of the report"""
         
-        # Add project root to path
-        project_root = Path(__file__).parent.parent
-        sys.path.insert(0, str(project_root))
-        
-        print("=== REPORTER TEST ===")
-        print("Reporter agent ready for integration testing!")
-        print("Run the full multi-agent system to see complete report generation.")
-        
-        
+        try:
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write("="*80 + "\n")
+                f.write(f"RESEARCH REPORT: {report['metadata']['research_query'].upper()}\n")
+                f.write("="*80 + "\n")
+                f.write(f"Generated: {report['metadata']['generated_date']}\n")
+                f.write(f"Papers Analyzed: {report['metadata']['papers_analyzed']}\n")
+                f.write("="*80 + "\n\n")
+                
+                f.write("EXECUTIVE SUMMARY\n")
+                f.write("-"*50 + "\n")
+                f.write(report['executive_summary'])
+                f.write("\n\n")
+                
+                f.write("FULL REPORT\n")
+                f.write("-"*50 + "\n")
+                f.write(report['full_report'])
+                f.write("\n\n")
+                
+                f.write("RECOMMENDATIONS\n")
+                f.write("-"*50 + "\n")
+                for i, rec in enumerate(report['recommendations'], 1):
+                    f.write(f"{i}. {rec}\n")
+                
+        except Exception as e:
+            logger.error(f"Error saving readable report: {e}")
+
+# Test the reporter
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    
+    # Add project root to path
+    project_root = Path(__file__).parent.parent
+    sys.path.insert(0, str(project_root))
+    
+    print("=== REPORTER TEST ===")
+    print("Reporter agent ready for integration testing!")
+    print("Run the full multi-agent system to see complete report generation.")
