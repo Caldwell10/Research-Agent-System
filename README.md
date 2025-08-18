@@ -215,7 +215,7 @@ Multi-agent Research Tool/
 1. **Create virtual environment:**
    ```bash
    python -m venv research-env
-   source research-env/bin/activate  # On Windows: research-env\Scripts\activate
+   source research-env/bin/activate 
    ```
 
 2. **Install dependencies:**
