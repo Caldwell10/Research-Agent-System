@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import React from 'react'
+const { createContext, useContext, useEffect, useState, useCallback } = React
 import { io, Socket } from 'socket.io-client'
 import { WebSocketMessage } from '@/types/api'
 

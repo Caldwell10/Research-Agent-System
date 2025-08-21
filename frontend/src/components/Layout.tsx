@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '@/contexts/ThemeContext'
-import { useHealthCheck } from '@/hooks/useResearch'
-import { useWebSocket } from '@/contexts/WebSocketContext'
 import useMobile from '@/hooks/useMobile'
 import MobileBottomNav from './MobileBottomNav'
 import { 
@@ -11,11 +9,7 @@ import {
   History, 
   Heart,
   Sun, 
-  Moon, 
-  Wifi, 
-  WifiOff,
-  Activity,
-  AlertCircle 
+  Moon
 } from 'lucide-react'
 
 interface LayoutProps {
@@ -24,8 +18,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { theme, toggleTheme } = useTheme()
-  const { connected } = useWebSocket()
-  const { data: health, isLoading: healthLoading } = useHealthCheck()
   const location = useLocation()
   const { isMobile } = useMobile()
 
@@ -36,17 +28,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Favorites', href: '/favorites', icon: Heart },
   ]
 
-  const getHealthColor = () => {
-    if (healthLoading) return 'text-yellow-500'
-    if (health?.status === 'healthy') return 'text-green-500'
-    return 'text-red-500'
-  }
-
-  const getHealthIcon = () => {
-    if (healthLoading) return <Activity className="w-4 h-4 animate-pulse" />
-    if (health?.status === 'healthy') return <Activity className="w-4 h-4" />
-    return <AlertCircle className="w-4 h-4" />
-  }
 
   // Mobile layout
   if (isMobile) {
@@ -103,26 +84,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </nav>
 
             <div className="flex items-center space-x-4">
-              {/* WebSocket Status */}
-              <div className="flex items-center space-x-2 text-sm">
-                {connected ? (
-                  <Wifi className="w-4 h-4 text-green-500" />
-                ) : (
-                  <WifiOff className="w-4 h-4 text-red-500" />
-                )}
-                <span className="text-muted-foreground hidden sm:inline">
-                  {connected ? 'Connected' : 'Disconnected'}
-                </span>
-              </div>
-
-              {/* Health Status */}
-              <div className={`flex items-center space-x-1 ${getHealthColor()}`}>
-                {getHealthIcon()}
-                <span className="text-sm hidden sm:inline">
-                  {healthLoading ? 'Checking...' : health?.status || 'Unknown'}
-                </span>
-              </div>
-
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}

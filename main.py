@@ -1,4 +1,3 @@
-# main.py - Multi-Agent Research Paper Analysis System
 import sys
 import os
 from pathlib import Path
@@ -13,7 +12,7 @@ sys.path.insert(0, str(project_root))
 # Load environment variables 
 load_dotenv()
 
-# Import our agents and utilities
+# Import agents and utilities
 from utils.groq_llm import GroqLLM
 from agents.researcher import ResearcherAgent
 from agents.analyzer import AnalyzerAgent
@@ -44,22 +43,22 @@ class MultiAgentResearchSystem:
             groq_api_key: Groq API key (or will use environment variable)
             max_papers: Maximum papers to analyze per query
         """
-        logger.info("🚀 Initializing Multi-Agent Research System...")
+        logger.info(" Initializing Multi-Agent Research System...")
         
         # Load environment variables
         load_dotenv()
         
         # Initialize LLM
         self.llm = GroqLLM(api_key=groq_api_key)
-        logger.info("✅ LLM initialized")
+        logger.info(" LLM initialized")
         
         # Initialize agents
         self.researcher = ResearcherAgent(self.llm, max_papers=max_papers)
         self.analyzer = AnalyzerAgent(self.llm)
         self.reporter = ReporterAgent(self.llm)
         
-        logger.info("✅ All agents initialized")
-        logger.info("🎯 Multi-Agent Research System ready!")
+        logger.info(" All agents initialized")
+        logger.info(" Multi-Agent Research System ready!")
     
     def research_topic(self, query: str, save_report: bool = True) -> dict:
         """
@@ -73,11 +72,11 @@ class MultiAgentResearchSystem:
             Dictionary with complete research results
         """
         start_time = datetime.now()
-        logger.info(f"🔬 Starting research analysis for: '{query}'")
+        logger.info(f" Starting research analysis for: '{query}'")
         
         try:
             # Stage 1: Research - Find relevant papers
-            logger.info("📚 Stage 1: Researcher Agent - Finding papers...")
+            logger.info(" Stage 1: Researcher Agent - Finding papers...")
             research_results = self.researcher.research(query)
             
             if research_results['status'] != 'success':
@@ -89,7 +88,7 @@ class MultiAgentResearchSystem:
                 }
             
             papers_found = research_results['papers_found']
-            logger.info(f"✅ Found {papers_found} papers")
+            logger.info(f" Found {papers_found} papers")
             
             # Stage 2: Analysis - Deep technical analysis
             logger.info("🔍 Stage 2: Analyzer Agent - Analyzing papers...")
@@ -104,10 +103,10 @@ class MultiAgentResearchSystem:
                     "error": analysis_results.get('message', 'Unknown error')
                 }
             
-            logger.info("✅ Analysis complete")
+            logger.info(" Analysis complete")
             
             # Stage 3: Reporting - Generate comprehensive report
-            logger.info("📝 Stage 3: Reporter Agent - Generating report...")
+            logger.info(" Stage 3: Reporter Agent - Generating report...")
             report_results = self.reporter.generate_report(research_results, analysis_results)
             
             if report_results['status'] != 'success':
@@ -142,14 +141,14 @@ class MultiAgentResearchSystem:
                 }
             }
             
-            logger.info(f"🎉 Research complete! Analyzed {papers_found} papers in {execution_time:.1f} seconds")
+            logger.info(f" Research complete! Analyzed {papers_found} papers in {execution_time:.1f} seconds")
             if save_report and report_results.get('saved_to'):
-                logger.info(f"📄 Report saved to: {report_results['saved_to']}")
+                logger.info(f" Report saved to: {report_results['saved_to']}")
             
             return final_results
             
         except Exception as e:
-            logger.error(f"❌ Error in research pipeline: {e}")
+            logger.error(f" Error in research pipeline: {e}")
             import traceback
             traceback.print_exc()
             
@@ -223,12 +222,12 @@ class MultiAgentResearchSystem:
 def main():
     """Main function for command-line usage"""
     
-    print("🔬 Multi-Agent Research Paper Analysis System")
+    print(" Multi-Agent Research Paper Analysis System")
     print("=" * 60)
     
     # Check environment
     if not os.getenv("GROQ_API_KEY"):
-        print("❌ Error: GROQ_API_KEY not found in environment variables")
+        print(" Error: GROQ_API_KEY not found in environment variables")
         print("Please set your Groq API key in the .env file")
         return
     

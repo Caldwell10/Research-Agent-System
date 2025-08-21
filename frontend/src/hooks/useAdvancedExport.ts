@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import jsPDF from 'jspdf'
 import { ExportOptions, FavoritePaper, SearchHistoryItem } from '@/types/research'
+import { ResearchResults } from '@/types/api'
 
 const useAdvancedExport = () => {
   
@@ -200,6 +201,325 @@ const useAdvancedExport = () => {
 
     // Save the PDF
     const filename = options.filename || `research-report-${new Date().toISOString().split('T')[0]}`
+    pdf.save(`${filename}.pdf`)
+  }, [])
+
+  // Generate Research Results PDF report
+  const exportResearchResultsToPDF = useCallback(async (
+    results: ResearchResults,
+    options: Partial<ExportOptions> = {}
+  ) => {
+    const pdf = new jsPDF('p', 'mm', 'a4')
+    const pageWidth = pdf.internal.pageSize.getWidth()
+    const pageHeight = pdf.internal.pageSize.getHeight()
+    const margin = 20
+    const contentWidth = pageWidth - 2 * margin
+    let currentY = margin
+
+    // Helper function to add new page if needed
+    const checkPageBreak = (height: number) => {
+      if (currentY + height > pageHeight - margin) {
+        pdf.addPage()
+        currentY = margin
+        return true
+      }
+      return false
+    }
+
+    // Helper function to wrap text
+    const wrapText = (text: string, maxWidth: number, fontSize: number) => {
+      pdf.setFontSize(fontSize)
+      return pdf.splitTextToSize(text, maxWidth)
+    }
+
+    // Title page
+    pdf.setFontSize(24)
+    pdf.setFont('helvetica', 'bold')
+    pdf.text('Research Analysis Report', pageWidth / 2, currentY, { align: 'center' })
+    currentY += 20
+
+    pdf.setFontSize(14)
+    pdf.setFont('helvetica', 'normal')
+    pdf.text(`Query: ${results.query}`, pageWidth / 2, currentY, { align: 'center' })
+    currentY += 10
+
+    pdf.setFontSize(12)
+    pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, pageWidth / 2, currentY, { align: 'center' })
+    currentY += 15
+
+    // Status and summary
+    if (results.status === 'success') {
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('✓ Analysis Complete', pageWidth / 2, currentY, { align: 'center' })
+      currentY += 15
+    }
+
+    // Summary statistics
+    if (results.summary) {
+      checkPageBreak(40)
+      pdf.setFontSize(14)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Summary', margin, currentY)
+      currentY += 10
+
+      pdf.setFontSize(12)
+      pdf.setFont('helvetica', 'normal')
+      
+      const summaryItems = [
+        `Papers Found: ${results.summary.papers_found}`,
+        `Analysis Time: ${results.execution_time_seconds?.toFixed(1)}s`,
+        `Key Insights: ${results.summary.key_insights}`,
+        `Recommendations: ${results.summary.recommendations}`
+      ]
+
+      summaryItems.forEach((item, index) => {
+        const x = margin + (index % 2) * (contentWidth / 2)
+        const y = currentY + Math.floor(index / 2) * 8
+        pdf.text(item, x, y)
+      })
+      currentY += Math.ceil(summaryItems.length / 2) * 8 + 15
+    }
+
+    // Executive Summary
+    if (results.report?.executive_summary) {
+      checkPageBreak(30)
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Executive Summary', margin, currentY)
+      currentY += 10
+
+      pdf.setFontSize(11)
+      pdf.setFont('helvetica', 'normal')
+      const summaryLines = wrapText(results.report.executive_summary, contentWidth, 11)
+      summaryLines.forEach((line: string) => {
+        checkPageBreak(5)
+        pdf.text(line, margin, currentY)
+        currentY += 5
+      })
+      currentY += 15
+    }
+
+    // Key Insights (from analysis results)
+    if (results.analysis_results?.insights) {
+      const insights = results.analysis_results.insights
+      
+      checkPageBreak(30)
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Key Insights', margin, currentY)
+      currentY += 10
+
+      // Trending Methods
+      if (insights.trending_methods?.length > 0) {
+        pdf.setFontSize(12)
+        pdf.setFont('helvetica', 'bold')
+        pdf.text('Trending Methods:', margin, currentY)
+        currentY += 8
+
+        pdf.setFontSize(11)
+        pdf.setFont('helvetica', 'normal')
+        insights.trending_methods.forEach((method, index) => {
+          checkPageBreak(6)
+          pdf.text(`• ${method}`, margin + 5, currentY)
+          currentY += 6
+        })
+        currentY += 8
+      }
+
+      // Research Gaps
+      if (insights.research_gaps?.length > 0) {
+        checkPageBreak(15)
+        pdf.setFontSize(12)
+        pdf.setFont('helvetica', 'bold')
+        pdf.text('Research Gaps:', margin, currentY)
+        currentY += 8
+
+        pdf.setFontSize(11)
+        pdf.setFont('helvetica', 'normal')
+        insights.research_gaps.forEach((gap, index) => {
+          checkPageBreak(6)
+          pdf.text(`• ${gap}`, margin + 5, currentY)
+          currentY += 6
+        })
+        currentY += 8
+      }
+
+      // Key Findings
+      if (insights.key_findings?.length > 0) {
+        checkPageBreak(15)
+        pdf.setFontSize(12)
+        pdf.setFont('helvetica', 'bold')
+        pdf.text('Key Findings:', margin, currentY)
+        currentY += 8
+
+        pdf.setFontSize(11)
+        pdf.setFont('helvetica', 'normal')
+        insights.key_findings.forEach((finding, index) => {
+          checkPageBreak(6)
+          pdf.text(`• ${finding}`, margin + 5, currentY)
+          currentY += 6
+        })
+        currentY += 10
+      }
+    }
+
+    // Recommendations
+    if (results.report?.recommendations && results.report.recommendations.length > 0) {
+      checkPageBreak(30)
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Recommendations', margin, currentY)
+      currentY += 10
+
+      pdf.setFontSize(11)
+      pdf.setFont('helvetica', 'normal')
+      results.report.recommendations.forEach((rec, index) => {
+        checkPageBreak(8)
+        const recLines = wrapText(`${index + 1}. ${rec}`, contentWidth - 10, 11)
+        recLines.forEach((line: string, lineIndex: number) => {
+          pdf.text(lineIndex === 0 ? line : `    ${line}`, margin + 5, currentY)
+          currentY += 5
+        })
+        currentY += 3
+      })
+      currentY += 10
+    }
+
+    // Technical Analysis
+    if (results.analysis_results?.technical_analysis) {
+      const tech = results.analysis_results.technical_analysis
+      
+      checkPageBreak(30)
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Technical Analysis', margin, currentY)
+      currentY += 15
+
+      if (tech.datasets_used?.length > 0) {
+        pdf.setFontSize(12)
+        pdf.setFont('helvetica', 'bold')
+        pdf.text('Datasets Used:', margin, currentY)
+        currentY += 8
+
+        pdf.setFontSize(11)
+        pdf.setFont('helvetica', 'normal')
+        tech.datasets_used.forEach((dataset) => {
+          checkPageBreak(6)
+          pdf.text(`• ${dataset}`, margin + 5, currentY)
+          currentY += 6
+        })
+        currentY += 8
+      }
+
+      if (tech.evaluation_metrics?.length > 0) {
+        checkPageBreak(15)
+        pdf.setFontSize(12)
+        pdf.setFont('helvetica', 'bold')
+        pdf.text('Evaluation Metrics:', margin, currentY)
+        currentY += 8
+
+        pdf.setFontSize(11)
+        pdf.setFont('helvetica', 'normal')
+        tech.evaluation_metrics.forEach((metric) => {
+          checkPageBreak(6)
+          pdf.text(`• ${metric}`, margin + 5, currentY)
+          currentY += 6
+        })
+        currentY += 10
+      }
+    }
+
+    // Papers Analyzed
+    if (results.research_results?.papers && results.research_results.papers.length > 0) {
+      checkPageBreak(30)
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'bold')
+      pdf.text('Papers Analyzed', margin, currentY)
+      currentY += 15
+
+      results.research_results.papers.forEach((paper, index) => {
+        checkPageBreak(40)
+
+        // Paper title
+        pdf.setFontSize(12)
+        pdf.setFont('helvetica', 'bold')
+        const titleLines = wrapText(`${index + 1}. ${paper.title}`, contentWidth, 12)
+        titleLines.forEach((line: string) => {
+          pdf.text(line, margin, currentY)
+          currentY += 6
+        })
+        currentY += 5
+
+        // Authors
+        pdf.setFontSize(10)
+        pdf.setFont('helvetica', 'italic')
+        const authorText = `Authors: ${paper.authors.slice(0, 3).join(', ')}${paper.authors.length > 3 ? ' et al.' : ''}`
+        pdf.text(authorText, margin, currentY)
+        currentY += 6
+
+        // Publication date and relevance score
+        pdf.setFont('helvetica', 'normal')
+        pdf.text(`Published: ${paper.published}`, margin, currentY)
+        if (paper.evaluation?.relevance_score) {
+          pdf.text(`Relevance: ${paper.evaluation.relevance_score}/10`, margin + 80, currentY)
+        }
+        currentY += 8
+
+        // Abstract (abbreviated)
+        if (paper.abstract) {
+          pdf.setFontSize(9)
+          const abstractText = paper.abstract.length > 300 
+            ? paper.abstract.substring(0, 300) + '...' 
+            : paper.abstract
+          const abstractLines = wrapText(`Abstract: ${abstractText}`, contentWidth, 9)
+          abstractLines.slice(0, 3).forEach((line: string) => { // Limit to 3 lines
+            checkPageBreak(4)
+            pdf.text(line, margin, currentY)
+            currentY += 4
+          })
+          currentY += 8
+        }
+
+        // Key contributions (if available)
+        if (paper.evaluation?.key_contributions && paper.evaluation.key_contributions.length > 0) {
+          pdf.setFontSize(9)
+          pdf.setFont('helvetica', 'bold')
+          pdf.text('Key Contributions:', margin, currentY)
+          currentY += 5
+
+          pdf.setFont('helvetica', 'normal')
+          paper.evaluation.key_contributions.slice(0, 2).forEach((contribution) => {
+            checkPageBreak(4)
+            const contribLines = wrapText(`• ${contribution}`, contentWidth - 10, 9)
+            contribLines.slice(0, 2).forEach((line: string) => {
+              pdf.text(line, margin + 5, currentY)
+              currentY += 4
+            })
+          })
+          currentY += 5
+        }
+
+        currentY += 10 // Space between papers
+      })
+    }
+
+    // Footer with metadata
+    pdf.setFontSize(8)
+    pdf.setFont('helvetica', 'normal')
+    const totalPages = pdf.internal.pages.length - 1
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i)
+      pdf.text(
+        `Page ${i} of ${totalPages} | Generated by Multi-Agent Research Tool`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      )
+    }
+
+    // Save the PDF
+    const filename = options.filename || `research-report-${results.query.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}`
     pdf.save(`${filename}.pdf`)
   }, [])
 
@@ -464,6 +784,7 @@ const useAdvancedExport = () => {
   return {
     exportData,
     exportToPDF,
+    exportResearchResultsToPDF,
     exportToSpreadsheet,
     exportToBibTeX,
     exportToWord,

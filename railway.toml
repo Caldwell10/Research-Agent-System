@@ -1,8 +1,0 @@
-[build]
-builder = "nixpacks"
-
-[deploy]
-startCommand = "python start.py"
-
-[env]
-NIXPACKS_PYTHON_VERSION = "3.10"

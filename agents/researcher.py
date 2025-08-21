@@ -226,29 +226,3 @@ Top Papers:"""
         
         return summary
 
-# Test the researcher agent
-if __name__ == "__main__":
-    from config import Config
-    
-    # Validate config
-    Config.validate()
-    
-    # Create LLM and agent
-    llm = GroqLLM()
-    researcher = ResearcherAgent(llm, max_papers=3)
-    
-    # Test research
-    results = researcher.research("transformer attention mechanisms")
-    
-    print("=== RESEARCH RESULTS ===")
-    print(f"Status: {results['status']}")
-    print(f"Papers found: {results['papers_found']}")
-    print(f"\nSummary:\n{results['summary']}")
-    
-    # Show first paper details
-    if results['papers']:
-        first_paper = results['papers'][0]
-        print(f"\n=== TOP PAPER DETAILS ===")
-        print(f"Title: {first_paper['title']}")
-        print(f"Relevance Score: {first_paper['evaluation']['relevance_score']}/10")
-        print(f"Key Contributions: {first_paper['evaluation']['key_contributions']}")

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import * as React from 'react'
 
 type Theme = 'light' | 'dark'
 
@@ -7,10 +7,10 @@ interface ThemeContextType {
   toggleTheme: () => void
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined)
 
 export const useTheme = () => {
-  const context = useContext(ThemeContext)
+  const context = React.useContext(ThemeContext)
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }
@@ -22,12 +22,16 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [theme, setTheme] = React.useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'light'
+    
     const savedTheme = localStorage.getItem('theme') as Theme
     return savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
   })
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const root = window.document.documentElement
     root.classList.remove('light', 'dark')
     root.classList.add(theme)

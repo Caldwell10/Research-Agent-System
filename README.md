@@ -12,10 +12,10 @@ The Multi-Agent Research Tool combines the power of multiple specialized AI agen
 
 ```
 ┌─────────────────┐    WebSocket/HTTP    ┌─────────────────┐
-│                 │◄──────────────────►  │                 │
-│ React Frontend  │                      │ FastAPI Backend |
-│                 │                      │                 │
-└─────────────────┘                      └─────────────────┘
+│                 │◄──────────────────► │                 │
+│   React Frontend │                     │  FastAPI Backend │
+│                 │                     │                 │
+└─────────────────┘                     └─────────────────┘
                                                  │
                                                  ▼
                                         ┌─────────────────┐
@@ -42,7 +42,7 @@ The Multi-Agent Research Tool combines the power of multiple specialized AI agen
 The frontend is built using modern React with TypeScript and follows a component-based architecture:
 
 #### Core Technologies
-- **React 18**: Component-based UI with hooks and context
+- **React**: Component-based UI with hooks and context
 - **TypeScript**: Type-safe development with enhanced IDE support
 - **Vite**: Fast build tool and development server
 - **Tailwind CSS**: Utility-first CSS framework for styling
@@ -95,7 +95,7 @@ The system employs three specialized AI agents:
 - **Groq LLM**: High-performance language model for analysis
 - **Rate Limiting**: Intelligent API call management
 
-## 🔌 Frontend-Backend Communication
+## Frontend-Backend Communication
 
 ### WebSocket Communication Pattern
 
@@ -254,7 +254,7 @@ Multi-agent Research Tool/
    ```
    Frontend runs on `http://localhost:3001`
 
-## Testing
+## 🧪 Testing
 
 ### Frontend Testing
 
@@ -303,7 +303,7 @@ The project includes comprehensive testing:
 - **Performance Optimization**: Code splitting, lazy loading, and caching
 - **Error Boundaries**: Graceful error handling and recovery
 
-## 🛠Development
+##  Development
 
 ### Available Scripts
 
@@ -326,7 +326,7 @@ The project includes comprehensive testing:
 - **Prettier**: Consistent code formatting
 - **Husky**: Pre-commit hooks for quality gates
 
-## 🏗Deployment
+## 🏗️ Deployment
 
 ### Production Build
 
@@ -358,7 +358,7 @@ VITE_API_URL=http://localhost:8000
 VITE_WS_URL=ws://localhost:8000
 ```
 
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -366,8 +366,11 @@ VITE_WS_URL=ws://localhost:8000
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## 📄 License
 
-## Acknowledgments
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+##  Acknowledgments
 
 - **ArXiv**: For providing open access to academic papers
 - **Groq**: For high-performance language model API
@@ -375,3 +378,4 @@ VITE_WS_URL=ws://localhost:8000
 - **FastAPI**: For the modern Python web framework
 
 ---
+

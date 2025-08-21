@@ -222,7 +222,8 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         const buttons = screen.getAllByRole('button')
         const inputs = screen.getAllByRole('textbox')
         
-        [...buttons, ...inputs].forEach(element => {
+        const allElements = [...buttons, ...inputs]
+        allElements.forEach(element => {
           const styles = getComputedStyle(element)
           
           // Should have visible borders or backgrounds

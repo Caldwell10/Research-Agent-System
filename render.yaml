@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: multi-agent-research
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python start.py
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: MAX_PAPERS
+        value: 10

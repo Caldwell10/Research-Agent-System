@@ -263,44 +263,6 @@ export const processRelevanceScores = (papers: any[]) => {
   }
 }
 
-export const processPublicationTimeline = (papers: any[]) => {
-  const timeData = papers
-    .filter(paper => paper.published)
-    .map(paper => {
-      const date = new Date(paper.published)
-      return {
-        date: isNaN(date.getTime()) ? new Date() : date,
-        title: paper.title,
-        relevance: paper.evaluation?.relevance_score || 0
-      }
-    })
-    .filter(item => !isNaN(item.date.getTime()))
-    .sort((a, b) => a.date.getTime() - b.date.getTime())
-  
-  // Group by month
-  const monthlyData: { [key: string]: number } = {}
-  timeData.forEach(item => {
-    const monthKey = `${item.date.getFullYear()}-${String(item.date.getMonth() + 1).padStart(2, '0')}`
-    monthlyData[monthKey] = (monthlyData[monthKey] || 0) + 1
-  })
-  
-  return {
-    labels: Object.keys(monthlyData),
-    datasets: [{
-      label: 'Papers Published',
-      data: Object.values(monthlyData),
-      borderColor: '#3B82F6',
-      backgroundColor: 'rgba(59, 130, 246, 0.1)',
-      fill: true,
-      tension: 0.4,
-      borderWidth: 3,
-      pointBackgroundColor: '#3B82F6',
-      pointBorderColor: '#1E40AF',
-      pointHoverBackgroundColor: '#1E40AF',
-      pointHoverBorderColor: '#3B82F6',
-    }]
-  }
-}
 
 export const processResearchCategories = (papers: any[]) => {
   const categories: { [key: string]: number } = {}

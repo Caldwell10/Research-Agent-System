@@ -7,6 +7,20 @@ export interface SearchHistoryItem {
     papers_found: number
     execution_time: number
     status: 'success' | 'failed' | 'error'
+    papers?: Array<{
+      title: string
+      authors: string[]
+      abstract: string
+      published: string
+      arxiv_id?: string
+      pdf_url?: string
+      evaluation?: {
+        relevance_score: number
+        key_contributions: string[]
+        limitations: string[]
+        importance: string
+      }
+    }>
   }
   parameters: {
     max_papers: number

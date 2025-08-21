@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react'
-import { BarChart3, Clock, Eye, EyeOff, Filter, RefreshCw } from 'lucide-react'
+import { BarChart3, Eye, EyeOff, Filter, RefreshCw } from 'lucide-react'
 import RelevanceChart from './charts/RelevanceChart'
-import TimelineChart from './charts/TimelineChart'
 import CategoryChart from './charts/CategoryChart'
 import ScatterChart from './charts/ScatterChart'
 import { ResearchResults } from '@/types/api'
@@ -15,7 +14,6 @@ interface VisualizationDashboardProps {
 interface FilterState {
   relevanceRange?: string
   category?: string
-  dateRange?: { start: string; end: string }
   selectedPaper?: any
 }
 
@@ -26,7 +24,6 @@ const VisualizationDashboard: React.FC<VisualizationDashboardProps> = ({
   const [filters, setFilters] = useState<FilterState>({})
   const [visibleCharts, setVisibleCharts] = useState({
     relevance: true,
-    timeline: true,
     category: true,
     scatter: true,
   })
@@ -74,16 +71,6 @@ const VisualizationDashboard: React.FC<VisualizationDashboardProps> = ({
       })
     }
 
-    // Filter by date range
-    if (filters.dateRange) {
-      filtered = filtered.filter(paper => {
-        if (!paper.published) return false
-        const paperDate = new Date(paper.published)
-        const startDate = new Date(filters.dateRange!.start)
-        const endDate = new Date(filters.dateRange!.end)
-        return paperDate >= startDate && paperDate <= endDate
-      })
-    }
 
     return filtered
   }, [allPapers, filters])
@@ -99,13 +86,6 @@ const VisualizationDashboard: React.FC<VisualizationDashboardProps> = ({
     setFilters(prev => ({
       ...prev,
       category: prev.category === category ? undefined : category
-    }))
-  }
-
-  const handleDateRangeFilter = (startDate: string, endDate: string) => {
-    setFilters(prev => ({
-      ...prev,
-      dateRange: prev.dateRange?.start === startDate ? undefined : { start: startDate, end: endDate }
     }))
   }
 
@@ -138,13 +118,6 @@ const VisualizationDashboard: React.FC<VisualizationDashboardProps> = ({
       icon: BarChart3,
     },
     {
-      key: 'timeline' as const,
-      title: 'Publication Timeline',
-      component: TimelineChart,
-      description: 'Papers published over time',
-      icon: Clock,
-    },
-    {
       key: 'category' as const,
       title: 'Research Categories',
       component: CategoryChart,
@@ -163,7 +136,6 @@ const VisualizationDashboard: React.FC<VisualizationDashboardProps> = ({
   const activeFilters = [
     filters.relevanceRange && `Relevance: ${filters.relevanceRange.replace('score-', '')}/10`,
     filters.category && `Category: ${filters.category}`,
-    filters.dateRange && `Date: ${filters.dateRange.start} to ${filters.dateRange.end}`,
     filters.selectedPaper && `Paper: ${filters.selectedPaper.title.substring(0, 30)}...`,
   ].filter(Boolean)
 
@@ -308,7 +280,6 @@ const VisualizationDashboard: React.FC<VisualizationDashboardProps> = ({
             papers: filteredPapers,
             onDataClick: key === 'relevance' ? handleRelevanceFilter : undefined,
             onCategoryClick: key === 'category' ? handleCategoryFilter : undefined,
-            onDateRangeSelect: key === 'timeline' ? handleDateRangeFilter : undefined,
             onPaperClick: key === 'scatter' ? handlePaperClick : undefined,
           }
 

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+import React from 'react'
+const { useState, useEffect, useCallback } = React
 import { offlineStorage } from './useOfflineStorage'
 import useToast from './useToast'
 
@@ -22,7 +23,7 @@ interface QueuedAction {
 const useOfflineManager = () => {
   const { showToast, showSuccess, showError, showOffline, showOnline } = useToast()
   const [state, setState] = useState<OfflineManagerState>({
-    isOnline: navigator.onLine,
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     queueSize: 0,
     cacheSize: 0,
     lastSync: null,
@@ -31,6 +32,8 @@ const useOfflineManager = () => {
 
   // Monitor online/offline status
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     let offlineToastId: string | null = null
 
     const handleOnline = async () => {
@@ -64,7 +67,7 @@ const useOfflineManager = () => {
     try {
       const queue = await offlineStorage.getQueue()
       const cacheSize = await offlineStorage.getSize()
-      const lastSyncStr = localStorage.getItem('last-sync')
+      const lastSyncStr = typeof window !== 'undefined' ? localStorage.getItem('last-sync') : null
       
       setState(prev => ({
         ...prev,
@@ -145,7 +148,9 @@ const useOfflineManager = () => {
       
       // Update last sync time
       const now = new Date()
-      localStorage.setItem('last-sync', now.toISOString())
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('last-sync', now.toISOString())
+      }
       setState(prev => ({ ...prev, lastSync: now, syncInProgress: false }))
 
       // Show results

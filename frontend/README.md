@@ -111,9 +111,9 @@ src/
 ## Environment Variables
 
 ```bash
-VITE_API_URL=http://localhost:8000  # Backend API URL
-VITE_WS_URL=ws://localhost:8000/ws  # WebSocket URL
-NODE_ENV=development                # Environment
+VITE_API_URL=http://localhost:8000  #
+VITE_WS_URL=ws://localhost:8000/ws  
+NODE_ENV=development                
 ```
 
 ## Contributing

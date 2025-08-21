@@ -23,14 +23,14 @@ def test_researcher_agent():
         llm = GroqLLM()
         researcher = ResearcherAgent(llm, max_papers=2)
         
-        print("✅ Agents created successfully")
+        print(" Agents created successfully")
         
         # Test research
-        print("🔍 Searching for papers on 'neural networks'...")
+        print(" Searching for papers on 'neural networks'...")
         results = researcher.research("neural networks")
         
         if results['status'] == 'success':
-            print(f"✅ Success! Found {results['papers_found']} papers")
+            print(f"Success! Found {results['papers_found']} papers")
             if results['papers']:
                 top_paper = results['papers'][0]
                 print(f"📄 Top paper: {top_paper['title'][:60]}...")

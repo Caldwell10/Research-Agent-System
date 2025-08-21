@@ -18,6 +18,7 @@ import {
   AlertCircle,
   Loader2,
   Download,
+  FileDown,
   ExternalLink,
   BarChart3,
   Heart,
@@ -36,7 +37,7 @@ const ResearchPage: React.FC = () => {
   const { clearMessages } = useWebSocket()
   const { addSearch, updateSearchResults, searchHistory } = useSearchHistory()
   const { addToFavorites, isInFavorites } = useFavorites()
-  const { exportToJSON } = useAdvancedExport()
+  const { exportToJSON, exportResearchResultsToPDF } = useAdvancedExport()
 
   // Get recent searches for dropdown
   const recentSearches = searchHistory
@@ -85,7 +86,8 @@ const ResearchPage: React.FC = () => {
           updateSearchResults(searchId, {
             status: historyStatus,
             papers_found: data.research_results?.papers?.length || 0,
-            execution_time: data.execution_time_seconds || 0
+            execution_time: data.execution_time_seconds || 0,
+            papers: data.research_results?.papers || []
           })
           
           // Automatically show visualization if we have successful results with papers
@@ -155,6 +157,24 @@ const ResearchPage: React.FC = () => {
     } catch (error) {
       console.error('Error downloading report:', error)
       alert('Failed to download report. Please try again.')
+    }
+  }
+
+  const handleDownloadPDF = async () => {
+    if (!results) return
+    
+    try {
+      const filename = `research-breakdown-${query.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}`
+      
+      await exportResearchResultsToPDF(results, {
+        filename,
+        include_abstracts: true,
+        include_notes: true,
+        include_tags: true
+      })
+    } catch (error) {
+      console.error('Error downloading PDF:', error)
+      alert('Failed to download PDF. Please try again.')
     }
   }
 
@@ -308,6 +328,18 @@ const ResearchPage: React.FC = () => {
                 </div>
               </div>
             )}
+            
+            {/* PDF Download Button */}
+            <div className="mt-4 flex justify-end">
+              <button 
+                onClick={handleDownloadPDF}
+                className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+                title="Download research breakdown as PDF"
+              >
+                <FileDown className="w-4 h-4" />
+                <span>Download PDF</span>
+              </button>
+            </div>
           </div>
 
           {/* Executive Summary */}
@@ -420,18 +452,27 @@ const ResearchPage: React.FC = () => {
             <div className="bg-card rounded-lg border border-border p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground">Full Report</h3>
+                  <h3 className="text-lg font-semibold text-foreground">Export Report</h3>
                   <p className="text-sm text-muted-foreground">
-                    Complete analysis saved to: {results.summary.report_saved_to}
+                    Download your complete research analysis
                   </p>
                 </div>
-                <button 
-                  onClick={() => handleDownloadReport()}
-                  className="flex items-center space-x-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download</span>
-                </button>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => handleDownloadPDF()}
+                    className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    <FileDown className="w-4 h-4" />
+                    <span>PDF</span>
+                  </button>
+                  <button 
+                    onClick={() => handleDownloadReport()}
+                    className="flex items-center space-x-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>JSON</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}

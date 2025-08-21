@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import React from 'react'
+const { useState, useCallback } = React
 import { ToastProps } from '@/components/Toast'
 
 type ToastType = ToastProps['type']

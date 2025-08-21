@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+import React from 'react'
+const { useState, useEffect, useCallback } = React
 
 interface PWAState {
   isInstallable: boolean
@@ -20,7 +21,7 @@ const usePWA = (): PWAState & PWAActions => {
   const [state, setState] = useState<PWAState>({
     isInstallable: false,
     isInstalled: false,
-    isOffline: !navigator.onLine,
+    isOffline: typeof navigator !== 'undefined' ? !navigator.onLine : false,
     swRegistration: null,
     updateAvailable: false,
   })
@@ -29,19 +30,23 @@ const usePWA = (): PWAState & PWAActions => {
 
   // Register service worker
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
       registerServiceWorker()
     }
 
     // Check if app is already installed
-    const isInstalled = window.matchMedia('(display-mode: standalone)').matches ||
-                       (window.navigator as any).standalone === true
+    if (typeof window !== 'undefined') {
+      const isInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                         (window.navigator as any).standalone === true
 
-    setState(prev => ({ ...prev, isInstalled }))
+      setState(prev => ({ ...prev, isInstalled }))
+    }
   }, [])
 
   // Listen for install prompt
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e)
@@ -65,6 +70,8 @@ const usePWA = (): PWAState & PWAActions => {
 
   // Listen for online/offline status
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const handleOnline = () => setState(prev => ({ ...prev, isOffline: false }))
     const handleOffline = () => setState(prev => ({ ...prev, isOffline: true }))
 

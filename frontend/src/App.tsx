@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+const { useEffect } = React
 import { Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
@@ -27,6 +28,8 @@ function AppContent() {
 
   // Request notification permission on first visit
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const hasRequestedNotifications = localStorage.getItem('notifications-requested')
     if (!hasRequestedNotifications) {
       setTimeout(() => {

@@ -12,7 +12,11 @@ import {
   MoreVertical,
   X,
   FileText,
-  Clock
+  Clock,
+  ChevronDown,
+  ChevronRight,
+  ExternalLink,
+  Users
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SearchHistoryItem } from '@/types/research'
@@ -49,6 +53,7 @@ const SearchHistoryPanel: React.FC<SearchHistoryPanelProps> = ({
   const [showFilters, setShowFilters] = useState(false)
   const [editingNotes, setEditingNotes] = useState<string | null>(null)
   const [newNotes, setNewNotes] = useState('')
+  const [expandedSearches, setExpandedSearches] = useState<string[]>([])
 
   // Filter searches
   const filteredSearches = useMemo(() => {
@@ -100,6 +105,14 @@ const SearchHistoryPanel: React.FC<SearchHistoryPanelProps> = ({
     updateNotes(searchId, newNotes)
     setEditingNotes(null)
     setNewNotes('')
+  }
+
+  const toggleSearchExpanded = (searchId: string) => {
+    setExpandedSearches(prev => 
+      prev.includes(searchId)
+        ? prev.filter(id => id !== searchId)
+        : [...prev, searchId]
+    )
   }
 
   const getStatusColor = (status?: string) => {
@@ -333,10 +346,19 @@ const SearchHistoryPanel: React.FC<SearchHistoryPanelProps> = ({
                           </span>
                           {search.results && (
                             <>
-                              <span className="flex items-center space-x-1">
+                              <button
+                                onClick={() => toggleSearchExpanded(search.id)}
+                                className="flex items-center space-x-1 text-primary hover:text-primary/80 transition-colors"
+                                disabled={!search.results.papers || search.results.papers.length === 0}
+                              >
                                 <FileText className="w-3 h-3" />
                                 <span>{search.results.papers_found} papers</span>
-                              </span>
+                                {search.results.papers && search.results.papers.length > 0 && (
+                                  expandedSearches.includes(search.id) ? 
+                                    <ChevronDown className="w-3 h-3" /> : 
+                                    <ChevronRight className="w-3 h-3" />
+                                )}
+                              </button>
                               {search.results.execution_time && (
                                 <span className="flex items-center space-x-1">
                                   <Clock className="w-3 h-3" />
@@ -450,6 +472,60 @@ const SearchHistoryPanel: React.FC<SearchHistoryPanelProps> = ({
                       >
                         Add notes...
                       </button>
+                    )}
+
+                    {/* Papers Display */}
+                    {expandedSearches.includes(search.id) && search.results?.papers && search.results.papers.length > 0 && (
+                      <div className="mt-4 border-t border-border pt-4">
+                        <h5 className="text-sm font-medium text-foreground mb-3 flex items-center space-x-2">
+                          <Users className="w-4 h-4" />
+                          <span>Papers Found ({search.results.papers.length})</span>
+                        </h5>
+                        <div className="space-y-3">
+                          {search.results.papers.map((paper, index) => (
+                            <div key={index} className="p-3 bg-muted/30 rounded-lg border border-border/30">
+                              <div className="flex items-start justify-between mb-2">
+                                <h6 className="font-medium text-foreground text-sm leading-tight pr-2">
+                                  {paper.title}
+                                </h6>
+                                <div className="flex items-center space-x-2 flex-shrink-0">
+                                  {paper.evaluation?.relevance_score && (
+                                    <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
+                                      {paper.evaluation.relevance_score}/10
+                                    </span>
+                                  )}
+                                  {paper.pdf_url && (
+                                    <a
+                                      href={paper.pdf_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="p-1 rounded text-muted-foreground hover:text-primary transition-colors"
+                                      title="View PDF"
+                                    >
+                                      <ExternalLink className="w-3 h-3" />
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                {paper.authors.slice(0, 3).join(', ')}
+                                {paper.authors.length > 3 && ` +${paper.authors.length - 3} more`}
+                              </p>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                Published: {paper.published}
+                              </p>
+                              {paper.abstract && (
+                                <p className="text-xs text-foreground line-clamp-2">
+                                  {paper.abstract.length > 200 
+                                    ? paper.abstract.substring(0, 200) + '...' 
+                                    : paper.abstract
+                                  }
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
