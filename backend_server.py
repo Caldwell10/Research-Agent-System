@@ -32,8 +32,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS
+# Configure CORS - Production and development origins
 cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001").split(",")
+
+# Add current domain for production
+if os.getenv("RENDER_EXTERNAL_URL"):
+    cors_origins.append(os.getenv("RENDER_EXTERNAL_URL"))
+
+# In production, also allow the render domain
+if os.getenv("ENVIRONMENT") == "production":
+    cors_origins.extend(["*"])  # Allow all origins in production (can be restricted later)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -46,15 +54,31 @@ app.add_middleware(
 research_system = None
 
 # Mount static files (frontend) if they exist
-if os.path.exists("frontend/dist"):
-    app.mount("/static", StaticFiles(directory="frontend/dist", html=True), name="static")
+static_dir = "frontend/dist"
+if os.path.exists(static_dir):
+    # Mount static assets
+    app.mount("/assets", StaticFiles(directory=f"{static_dir}/assets"), name="assets")
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
     
-    # Serve index.html at root path
+    # Import FileResponse for serving HTML
     from fastapi.responses import FileResponse
     
     @app.get("/")
-    async def read_root():
-        return FileResponse("frontend/dist/index.html")
+    async def serve_frontend():
+        """Serve the React frontend"""
+        return FileResponse(f"{static_dir}/index.html")
+    
+    @app.get("/{path:path}")
+    async def serve_frontend_routes(path: str):
+        """Serve React frontend for all routes (SPA support)"""
+        # Don't intercept API routes
+        if path.startswith("api/") or path.startswith("socket.io/") or path.startswith("docs") or path.startswith("openapi.json"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        # For all other routes, serve the React app
+        return FileResponse(f"{static_dir}/index.html")
+else:
+    logger.warning("⚠️ Frontend dist directory not found - API only mode")
 
 # Create Socket.IO server
 sio = socketio.AsyncServer(
@@ -208,14 +232,15 @@ async def get_research_summary(query: str):
 # Mount Socket.IO app
 app.mount("/socket.io", socket_app)
 
-@app.get("/")
-async def root():
-    """Root endpoint"""
+@app.get("/api/")
+async def api_root():
+    """API root endpoint"""
     return {
         "message": "Multi-Agent Research API",
         "version": "1.0.0",
         "docs": "/docs",
-        "health": "/api/health"
+        "health": "/api/health",
+        "frontend": "Frontend served at /" if os.path.exists("frontend/dist") else "No frontend available"
     }
 
 # Error handlers

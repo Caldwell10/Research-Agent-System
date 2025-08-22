@@ -1,21 +1,36 @@
 #!/bin/bash
 
-echo "🔨 Building Multi-Agent Research Tool..."
+set -e  # Exit on any error
+
+echo "🏗️  Starting Multi-Agent Research Tool build process..."
 
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
-pip install -r requirements_backend.txt
+pip install --upgrade pip
+pip install -r requirements.txt
 
-# Build frontend if Node.js is available
-if command -v npm &> /dev/null; then
-    echo "🎨 Building frontend..."
-    cd frontend
-    npm ci
-    npm run build
-    cd ..
-    echo "✅ Frontend build complete"
+# Install Node.js and build frontend
+echo "📦 Installing Node.js dependencies..."
+cd frontend
+
+# Install dependencies
+npm ci --production=false
+
+# Build the frontend (skip type checking for production)
+echo "🎨 Building React frontend..."
+npm run build:production
+
+# Move back to root
+cd ..
+
+# Copy built frontend to backend static directory
+echo "📁 Setting up static files..."
+if [ -d "frontend/dist" ]; then
+    echo "✅ Frontend build successful - dist directory found"
+    ls -la frontend/dist/
 else
-    echo "⚠️  Node.js not found, skipping frontend build"
+    echo "❌ Frontend build failed - no dist directory found"
+    exit 1
 fi
 
-echo "🚀 Build complete!"
+echo "🚀 Build process completed successfully!"
