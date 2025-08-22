@@ -21,10 +21,16 @@ env/
 
 # Output files
 outputs/
-*.json
-*.txt
+outputs/*.json
+outputs/*.txt
+research_report_*.txt
+research_report_*.json
 logs/
 *.log
+
+# Allow important txt files
+!requirements.txt
+!requirements*.txt
 
 # OS files
 .DS_Store

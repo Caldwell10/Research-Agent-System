@@ -1,0 +1,20 @@
+# Requirements for Render deployment
+# FastAPI and server
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+python-socketio>=5.10.0
+
+# Environment and configuration
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# AI and research dependencies
+langchain>=0.0.300
+arxiv>=1.4.0
+groq>=0.4.0
+requests>=2.31.0
+
+# Additional utilities
+httptools>=0.6.0
+uvloop>=0.17.0
+aiofiles>=23.0.0
