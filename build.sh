@@ -23,6 +23,13 @@ npm ci --production=false
 
 # Build the frontend (skip type checking for production)
 echo "🎨 Building React frontend..."
+# Set production environment variables
+export VITE_API_URL="https://multi-agent-research-tool.onrender.com"
+export VITE_WS_URL="wss://multi-agent-research-tool.onrender.com"
+export VITE_APP_NAME="Multi-Agent Research Tool"
+export VITE_APP_VERSION="1.0.0"
+export VITE_ENABLE_PWA="true"
+export VITE_ENABLE_ANALYTICS="false"
 npm run build:production
 
 # Move back to root
