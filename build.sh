@@ -13,6 +13,11 @@ pip install -r requirements.txt
 echo "📦 Installing Node.js dependencies..."
 cd frontend
 
+# Debug: Show current directory and contents
+echo "Current directory: $(pwd)"
+echo "Contents:"
+ls -la
+
 # Install dependencies
 npm ci --production=false
 
