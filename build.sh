@@ -23,7 +23,7 @@ npm ci --production=false
 
 # Build the frontend (skip type checking for production)
 echo "🎨 Building React frontend..."
-# Set production environment variables
+# Set production environment variables - use same domain since frontend and backend are on same service
 export VITE_API_URL="https://multi-agent-research-tool.onrender.com"
 export VITE_WS_URL="wss://multi-agent-research-tool.onrender.com"
 export VITE_APP_NAME="Multi-Agent Research Tool"
