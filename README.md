@@ -12,15 +12,15 @@ The Multi-Agent Research Tool combines the power of multiple specialized AI agen
 
 ```
 ┌─────────────────┐    WebSocket/HTTP    ┌─────────────────┐
-│                 │◄──────────────────► │                 │
-│   React Frontend │                     │  FastAPI Backend │
-│                 │                     │                 │
-└─────────────────┘                     └─────────────────┘
+│                 │◄──────────────────►  │                 │
+│  React Frontend │                      │ FastAPI Backend |
+│                 │                      │                 │
+└─────────────────┘                      └─────────────────┘
                                                  │
                                                  ▼
                                         ┌─────────────────┐
                                         │  Multi-Agent    │
-                                        │  Research System │
+                                        │ Research System │
                                         └─────────────────┘
                                                  │
                                     ┌────────────┼────────────┐
@@ -29,8 +29,8 @@ The Multi-Agent Research Tool combines the power of multiple specialized AI agen
                             │  Researcher  │ │   Analyzer   │ │   Reporter   │
                             │    Agent     │ │    Agent     │ │    Agent     │
                             └──────────────┘ └──────────────┘ └──────────────┘
-                                    │            │            │
-                                    ▼            ▼            ▼
+                                    │               │                 │
+                                    ▼               ▼                 ▼
                             ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
                             │  ArXiv API   │ │  Groq LLM    │ │  Report Gen  │
                             │  Integration │ │  Analysis    │ │  & Export    │
