@@ -217,50 +217,6 @@ export const mockNetworkStatus = {
   }
 }
 
-// PWA utilities
-export const mockPWAFeatures = () => {
-  // Mock service worker
-  Object.defineProperty(navigator, 'serviceWorker', {
-    value: {
-      register: vi.fn(() => Promise.resolve({
-        installing: null,
-        waiting: null,
-        active: null,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn()
-      })),
-      ready: Promise.resolve({
-        installing: null,
-        waiting: null,
-        active: null,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn()
-      })
-    }
-  })
-  
-  // Mock notifications
-  Object.defineProperty(window, 'Notification', {
-    value: {
-      permission: 'default',
-      requestPermission: vi.fn(() => Promise.resolve('granted'))
-    }
-  })
-  
-  // Mock beforeinstallprompt
-  const mockInstallPrompt = {
-    prompt: vi.fn(() => Promise.resolve()),
-    userChoice: Promise.resolve({ outcome: 'accepted' })
-  }
-  
-  return {
-    triggerInstallPrompt: () => {
-      window.dispatchEvent(
-        Object.assign(new Event('beforeinstallprompt'), mockInstallPrompt)
-      )
-    }
-  }
-}
 
 // Wait utilities
 export const waitForAnimation = () => new Promise(resolve => setTimeout(resolve, 100))
