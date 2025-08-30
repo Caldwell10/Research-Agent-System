@@ -52,3 +52,12 @@ ehthumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Machine learning models (downloaded automatically)
+models/
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.pkl
+*.joblib
