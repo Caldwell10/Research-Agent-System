@@ -1,5 +1,3 @@
-import React from 'react'
-const { useEffect } = React
 import { Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { WebSocketProvider } from '@/contexts/WebSocketContext'
@@ -10,35 +8,10 @@ import HistoryPage from '@/pages/HistoryPage'
 import FavoritesPage from '@/pages/FavoritesPage'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import ToastContainer from '@/components/ToastContainer'
-import usePWA from '@/hooks/usePWA'
 import useToast from '@/hooks/useToast'
-import useOfflineManager from '@/hooks/useOfflineManager'
 
 function AppContent() {
-  const { isInstallable, install, requestNotificationPermission } = usePWA()
-  const { toasts, hideToast, showInfo } = useToast()
-  const { isOnline } = useOfflineManager()
-
-  // Show install prompt
-  useEffect(() => {
-    if (isInstallable) {
-      showInfo('Install App', 'Add to home screen for a better experience')
-    }
-  }, [isInstallable, install, showInfo])
-
-  // Request notification permission on first visit
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    
-    const hasRequestedNotifications = localStorage.getItem('notifications-requested')
-    if (!hasRequestedNotifications) {
-      setTimeout(() => {
-        requestNotificationPermission().then(() => {
-          localStorage.setItem('notifications-requested', 'true')
-        })
-      }, 5000)
-    }
-  }, [requestNotificationPermission])
+  const { toasts, hideToast } = useToast()
 
   return (
     <>

@@ -2,7 +2,7 @@ services:
   - type: web
     name: multi-agent-research-tool
     env: python
-    plan: free  # Change to 'starter' ($7/month) for production
+    plan: free 
     buildCommand: ./build.sh
     startCommand: ./start.sh
     envVars:
@@ -22,5 +22,4 @@ services:
         value: 0.0.0.0
       - key: PORT
         value: 10000
-    # Environment variables you'll need to set in Render dashboard:
-    # GROQ_API_KEY - Your Groq API key (keep this secret!)
+    
