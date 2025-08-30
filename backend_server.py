@@ -21,6 +21,8 @@ sys.path.insert(0, str(project_root))
 
 # Import the enhanced multi-agent system
 from enhanced_research_system import RateLimitedResearchSystem
+from agents.rag_agent import RAGAgent
+from utils.groq_llm import GroqLLM
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -97,12 +99,39 @@ class HealthResponse(BaseModel):
     timestamp: str
     version: Optional[str] = "1.0.0"
 
+# Global variables
+research_system = None
+rag_agent = None
+
 # Initialize the research system
 async def initialize_system():
-    global research_system
+    global research_system, rag_agent
     try:
         research_system = RateLimitedResearchSystem(max_papers=5)
         logger.info("✅ Enhanced Multi-Agent Research System initialized")
+        
+        # Initialize RAG system with S3 if configured
+        try:
+            groq_llm = GroqLLM()
+            s3_bucket = os.getenv('RAG_S3_BUCKET')
+            s3_prefix = os.getenv('RAG_S3_PREFIX', 'knowledge_base')
+            
+            if s3_bucket:
+                rag_agent = RAGAgent(
+                    groq_llm=groq_llm,
+                    use_s3=True,
+                    s3_bucket=s3_bucket,
+                    s3_prefix=s3_prefix
+                )
+                logger.info(f"✅ RAG system initialized with S3: {s3_bucket}/{s3_prefix}")
+            else:
+                rag_agent = RAGAgent(groq_llm=groq_llm)
+                logger.info("✅ RAG system initialized with local storage")
+                
+        except Exception as e:
+            logger.warning(f"⚠️ RAG system initialization failed: {e}")
+            rag_agent = None
+        
         return True
     except Exception as e:
         logger.error(f"❌ Failed to initialize research system: {e}")
@@ -232,6 +261,85 @@ async def get_research_summary(query: str):
 # Mount Socket.IO app
 app.mount("/socket.io", socket_app)
 
+# RAG Chat Models
+class RAGChatRequest(BaseModel):
+    question: str
+    research_topic: Optional[str] = None  # If provided, will first research this topic
+
+class RAGChatResponse(BaseModel):
+    status: str
+    response: str
+    confidence_score: float
+    referenced_papers: List[dict]
+    execution_time: float
+    knowledge_base_stats: Optional[dict] = None
+
+@app.post("/api/rag/chat", response_model=RAGChatResponse)
+async def rag_chat(request: RAGChatRequest):
+    """
+    RAG-powered chat endpoint for research questions
+    """
+    if not rag_agent:
+        raise HTTPException(status_code=503, detail="RAG system not initialized")
+    
+    try:
+        start_time = time.time()
+        
+        # If research topic provided, first add papers to knowledge base
+        if request.research_topic:
+            logger.info(f"🔬 Researching topic: {request.research_topic}")
+            
+            # Use the research system to find papers
+            if research_system:
+                research_results = await research_system.research_topic_with_progress(
+                    request.research_topic, 
+                    save_report=False
+                )
+                
+                if research_results['status'] == 'success' and 'papers' in research_results:
+                    # Add papers to RAG knowledge base
+                    papers = research_results['papers']
+                    add_result = rag_agent.add_papers_to_knowledge_base(papers)
+                    logger.info(f"📚 Added {len(papers)} papers to knowledge base")
+        
+        # Answer the question using RAG
+        rag_response = rag_agent.answer_question(request.question)
+        
+        # Get knowledge base stats
+        kb_stats = rag_agent.get_knowledge_base_stats()
+        
+        execution_time = time.time() - start_time
+        
+        return RAGChatResponse(
+            status=rag_response['status'],
+            response=rag_response['response'],
+            confidence_score=rag_response.get('confidence_score', 0.0),
+            referenced_papers=rag_response.get('retrieved_papers', []),
+            execution_time=execution_time,
+            knowledge_base_stats=kb_stats
+        )
+        
+    except Exception as e:
+        logger.error(f"RAG chat error: {e}")
+        raise HTTPException(status_code=500, detail=f"RAG chat failed: {str(e)}")
+
+@app.get("/api/rag/stats")
+async def rag_stats():
+    """Get RAG knowledge base statistics"""
+    if not rag_agent:
+        raise HTTPException(status_code=503, detail="RAG system not initialized")
+    
+    try:
+        stats = rag_agent.get_knowledge_base_stats()
+        return {
+            "status": "success",
+            "stats": stats,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error getting RAG stats: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
+
 @app.get("/api/")
 async def api_root():
     """API root endpoint"""
@@ -240,6 +348,8 @@ async def api_root():
         "version": "1.0.0",
         "docs": "/docs",
         "health": "/api/health",
+        "rag_chat": "/api/rag/chat",
+        "rag_stats": "/api/rag/stats",
         "frontend": "Frontend served at /" if os.path.exists("frontend/dist") else "No frontend available"
     }
 
