@@ -14,50 +14,50 @@ The Multi-Agent Research Tool is a production-ready SaaS platform that combines 
 ┌─────────────────────────────────────────────────────────────┐
 │                        Frontend (React/TS)                  │
 ├─────────────────────────────────────────────────────────────┤
-│ • ChatPage.tsx (RAG Chat Interface)                        │
-│ • ResearchPage.tsx (Research Dashboard)                    │  
-│ • Layout.tsx (Navigation & Routing)                        │
-│ • Real-time WebSocket Connection                           │
+│ • ChatPage.tsx (RAG Chat Interface)                         │
+│ • ResearchPage.tsx (Research Dashboard)                     │  
+│ • Layout.tsx (Navigation & Routing)                         │
+│ • Real-time WebSocket Connection                            │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   Backend API (FastAPI)                    │
+│                   Backend API (FastAPI)                     │
 ├─────────────────────────────────────────────────────────────┤
-│ • /api/rag/chat (RAG Q&A Endpoint)                        │
-│ • /api/research (Multi-Agent Research)                     │
-│ • /api/rag/stats (Knowledge Base Stats)                    │
-│ • WebSocket Support for Real-time Updates                  │
+│ • /api/rag/chat (RAG Q&A Endpoint)                          │
+│ • /api/research (Multi-Agent Research)                      │
+│ • /api/rag/stats (Knowledge Base Stats)                     │
+│ • WebSocket Support for Real-time Updates                   │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    Multi-Agent System                      │
+│                    Multi-Agent System                       │
 ├─────────────────────────────────────────────────────────────┤
-│ • ResearcherAgent (Paper Discovery)                        │
-│ • AnalyzerAgent (Content Analysis)                         │  
-│ • ReporterAgent (Report Generation)                        │
-│ • RAGAgent (Q&A Intelligence)                              │
+│ • ResearcherAgent (Paper Discovery)                         │
+│ • AnalyzerAgent (Content Analysis)                          │  
+│ • ReporterAgent (Report Generation)                         │
+│ • RAGAgent (Q&A Intelligence)                               │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    RAG Pipeline                            │
+│                    RAG Pipeline                             │
 ├─────────────────────────────────────────────────────────────┤
-│ • TextProcessor (Document Chunking)                        │
-│ • EmbeddingService (Vector Generation)                     │
-│ • S3VectorStore (Cloud Similarity Search)                  │
+│ • TextProcessor (Document Chunking)                         │
+│ • EmbeddingService (Vector Generation)                      │
+│ • S3VectorStore (Cloud Similarity Search)                   │
 │ • Knowledge Base Management                                 │  
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  External Services                         │
+│                  External Services                          │
 ├─────────────────────────────────────────────────────────────┤
-│ • ArXiv API (Academic Papers)                              │
-│ • Semantic Scholar API (Research Metadata)                 │
-│ • AWS S3 (Vector Storage)                                  │
-│ • Groq LLM (Language Generation)                           │
+│ • ArXiv API (Academic Papers)                               │
+│ • Semantic Scholar API (Research Metadata)                  │
+│ • AWS S3 (Vector Storage)                                   │
+│ • Groq LLM (Language Generation)                            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -431,18 +431,6 @@ RATE_LIMIT_WINDOW=3600
 VITE_API_URL=http://localhost:8000
 VITE_WS_URL=ws://localhost:8000
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ##  Acknowledgments
 
