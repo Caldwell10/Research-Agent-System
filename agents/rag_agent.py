@@ -16,7 +16,6 @@ sys.path.insert(0, str(project_root))
 
 from rag.text_processor import TextProcessor, TextChunk
 from rag.embedding_service import EmbeddingService  
-from rag.vector_store import VectorStore
 from rag.s3_vector_store import S3VectorStore
 from utils.groq_llm import GroqLLM
 
@@ -27,20 +26,16 @@ class RAGAgent:
     Retrieval-Augmented Generation agent for research papers
     """
     
-    def __init__(self, groq_llm: GroqLLM, knowledge_base_path: str = "knowledge_base", 
-                 use_s3: bool = False, s3_bucket: str = None, s3_prefix: str = "knowledge_base"):
+    def __init__(self, groq_llm: GroqLLM, s3_bucket: str = None, s3_prefix: str = "knowledge_base"):
         """
-        Initialize RAG agent
+        Initialize RAG agent with S3 storage
         
         Args:
             groq_llm: Groq LLM instance
-            knowledge_base_path: Path to store the knowledge base (local mode)
-            use_s3: Whether to use S3 for storage
-            s3_bucket: S3 bucket name (required if use_s3=True)
+            s3_bucket: S3 bucket name (required for cloud storage)
             s3_prefix: S3 prefix for objects
         """
         self.llm = groq_llm
-        self.use_s3 = use_s3
         
         # Initialize components
         logger.info("Initializing RAG components...")
@@ -48,26 +43,16 @@ class RAGAgent:
         self.text_processor = TextProcessor()
         self.embedding_service = EmbeddingService()
         
-        # Initialize vector store based on configuration
-        if use_s3:
-            if not s3_bucket:
-                raise ValueError("s3_bucket must be provided when use_s3=True")
-            
-            self.vector_store = S3VectorStore(
-                s3_bucket=s3_bucket,
-                s3_prefix=s3_prefix,
-                embedding_dimension=self.embedding_service.get_embedding_dimension()
-            )
-            logger.info(f"Using S3 vector store: {s3_bucket}/{s3_prefix}")
-        else:
-            self.knowledge_base_path = Path(knowledge_base_path)
-            self.knowledge_base_path.mkdir(parents=True, exist_ok=True)
-            
-            self.vector_store = VectorStore(
-                storage_path=str(self.knowledge_base_path),
-                embedding_dimension=self.embedding_service.get_embedding_dimension()
-            )
-            logger.info(f"Using local vector store: {self.knowledge_base_path}")
+        # Initialize S3 vector store
+        if not s3_bucket:
+            raise ValueError("s3_bucket is required - RAG agent now uses S3 storage only")
+        
+        self.vector_store = S3VectorStore(
+            s3_bucket=s3_bucket,
+            s3_prefix=s3_prefix,
+            embedding_dimension=self.embedding_service.get_embedding_dimension()
+        )
+        logger.info(f"Using S3 vector store: {s3_bucket}/{s3_prefix}")
         
         # Conversation history
         self.conversation_history = []
