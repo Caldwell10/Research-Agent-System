@@ -296,11 +296,14 @@ async def rag_chat(request: RAGChatRequest):
                     save_report=False
                 )
                 
-                if research_results['status'] == 'success' and 'papers' in research_results:
+                if research_results['status'] == 'success' and 'research_results' in research_results:
                     # Add papers to RAG knowledge base
-                    papers = research_results['papers']
-                    add_result = rag_agent.add_papers_to_knowledge_base(papers)
-                    logger.info(f"📚 Added {len(papers)} papers to knowledge base")
+                    papers = research_results['research_results']['papers']
+                    if papers:
+                        add_result = rag_agent.add_papers_to_knowledge_base(papers, request.research_topic)
+                        logger.info(f"📚 Added {len(papers)} papers to knowledge base")
+                    else:
+                        logger.warning("No papers found in research results")
         
         # Answer the question using RAG
         rag_response = rag_agent.answer_question(request.question)
@@ -339,6 +342,66 @@ async def rag_stats():
     except Exception as e:
         logger.error(f"Error getting RAG stats: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
+
+@app.get("/api/rag/papers")
+async def rag_papers():
+    """Get list of papers in knowledge base"""
+    if not rag_agent:
+        raise HTTPException(status_code=503, detail="RAG system not initialized")
+    
+    try:
+        # Get papers from knowledge base metadata
+        stats = rag_agent.get_knowledge_base_stats()
+        paper_info = []
+        
+        # Extract unique papers from metadata
+        if hasattr(rag_agent.vector_store, 'chunk_metadata'):
+            seen_papers = set()
+            for chunk_meta in rag_agent.vector_store.chunk_metadata.values():
+                paper_id = chunk_meta.get('paper_id', 'unknown')
+                if paper_id not in seen_papers:
+                    seen_papers.add(paper_id)
+                    paper_info.append({
+                        'paper_id': paper_id,
+                        'title': chunk_meta.get('paper_title', 'Unknown'),
+                        'authors': chunk_meta.get('authors', []),
+                        'source': chunk_meta.get('source', 'unknown')
+                    })
+        
+        return {
+            "status": "success",
+            "papers": paper_info,
+            "total_papers": len(paper_info),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error getting papers: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get papers: {str(e)}")
+
+@app.get("/api/rag/search-test")
+async def test_search(query: str = "reinforcement learning", limit: int = 5):
+    """Test search functionality"""
+    if not rag_agent:
+        raise HTTPException(status_code=503, detail="RAG system not initialized")
+    
+    try:
+        # Test vector search
+        results = rag_agent.vector_store.search_by_text(
+            query, 
+            rag_agent.embedding_service, 
+            k=limit
+        )
+        
+        return {
+            "status": "success",
+            "query": query,
+            "results": results,
+            "total_found": len(results),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error testing search: {e}")
+        raise HTTPException(status_code=500, detail=f"Search test failed: {str(e)}")
 
 @app.get("/api/")
 async def api_root():

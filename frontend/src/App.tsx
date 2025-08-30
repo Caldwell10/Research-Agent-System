@@ -4,6 +4,7 @@ import { WebSocketProvider } from '@/contexts/WebSocketContext'
 import Layout from '@/components/Layout'
 import HomePage from '@/pages/HomePage'
 import ResearchPage from '@/pages/ResearchPage'
+import ChatPage from '@/pages/ChatPage'
 import HistoryPage from '@/pages/HistoryPage'
 import FavoritesPage from '@/pages/FavoritesPage'
 import ErrorBoundary from '@/components/ErrorBoundary'
@@ -19,6 +20,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/research" element={<ResearchPage />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
