@@ -1,4 +1,4 @@
-/* Mobile-specific styles for PWA */
+/* Mobile-specific styles */
 
 /* Safe area support for devices with notches */
 .safe-area-pt {
@@ -188,18 +188,6 @@
   }
 }
 
-/* PWA-specific styles */
-@media (display-mode: standalone) {
-  /* Hide URL bar related spacing adjustments */
-  .pwa-standalone {
-    padding-top: env(safe-area-inset-top);
-  }
-  
-  /* Ensure content doesn't go behind status bar */
-  .pwa-content {
-    margin-top: env(safe-area-inset-top);
-  }
-}
 
 /* Landscape orientation on mobile */
 @media screen and (orientation: landscape) and (max-height: 500px) {
