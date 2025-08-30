@@ -15,7 +15,6 @@ load_dotenv()
 # Import agents and utilities
 from utils.groq_llm import GroqLLM
 from agents.researcher import ResearcherAgent
-from agents.enhanced_researcher import EnhancedResearcherAgent
 from agents.analyzer import AnalyzerAgent
 from agents.reporter import ReporterAgent
 

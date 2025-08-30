@@ -1,0 +1,1091 @@
+{
+  "0": {
+    "chunk_id": "unknown_abstract_0",
+    "text": "We present DressDance, a video diffusion framework that generates high quality 5-second-long 24 FPS virtual try-on videos at 1152x720 resolution of a user wearing desired garments while moving in accordance with a given reference video.",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "1": {
+    "chunk_id": "unknown_abstract_1",
+    "text": "moving in accordance with a given reference video. Our approach requires a single user image and supports a range of tops, bottoms, and one-piece garments, as well as simultaneous tops and bottoms try-on in a single pass.",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "2": {
+    "chunk_id": "unknown_abstract_2",
+    "text": "ltaneous tops and bottoms try-on in a single pass. Key to our framework is CondNet, a novel conditioning network that leverages attention to unify multi-modal inputs (text, images, and videos), thereby enhancing garment registration and motion fidelity.",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "3": {
+    "chunk_id": "unknown_abstract_3",
+    "text": "nhancing garment registration and motion fidelity. CondNet is trained on heterogeneous training data, combining limited video data and a larger, more readily available image dataset, in a multistage progressive manner.",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "4": {
+    "chunk_id": "unknown_abstract_4",
+    "text": "image dataset, in a multistage progressive manner. DressDance outperforms existing open source and commercial solutions and enables a high quality and flexible try-on experience",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "5": {
+    "chunk_id": "unknown_key_0",
+    "text": "We present Dress&Dance, a video diffusion framework that generates high\nquality 5-second-long 24 FPS virtual try-on videos at 1152x720 resolution of a\nuser wearing desired garments while moving in accordance with a given reference\nvideo",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "6": {
+    "chunk_id": "unknown_key_1",
+    "text": "Key to our framework is CondNet, a novel conditioning\nnetwork that leverages attention to unify multi-modal inputs (text, images, and\nvideos), thereby enhancing garment registration and motion fidelity",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "7": {
+    "chunk_id": "unknown_key_2",
+    "text": "Our approach requires a single user image and supports a range of tops,\nbottoms, and one-piece garments, as well as simultaneous tops and bottoms\ntry-on in a single pass",
+    "paper_id": "unknown",
+    "paper_title": "Dress&Dance: Dress up and Dance as You Like It - Technical Preview",
+    "authors": [
+      "Jun-Kun Chen",
+      "Aayush Bansal",
+      "Minh Phuoc Vo",
+      "Yu-Xiong Wang"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV",
+        "cs.LG"
+      ]
+    }
+  },
+  "8": {
+    "chunk_id": "unknown_abstract_0",
+    "text": "Learning control policies in simulation enables rapid, safe, and cost-effective development of advanced robotic capabilities. However, transferring these policies to the real world remains difficult due to the sim-to-real gap, where unmodeled dynamics and environmental disturbances can degrade",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "9": {
+    "chunk_id": "unknown_abstract_1",
+    "text": "ynamics and environmental disturbances can degrade policy performance. Existing approaches, such as domain randomization and Real2Sim2Real pipelines, can improve policy robustness, but either struggle under out-of-distribution conditions or require costly offline retraining.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "10": {
+    "chunk_id": "unknown_abstract_2",
+    "text": "n conditions or require costly offline retraining. In this work, we approach these problems from a different perspective. Instead of relying on diverse training conditions before deployment, we focus on rapidly adapting the learned policy in the real world in an online fashion.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "11": {
+    "chunk_id": "unknown_abstract_3",
+    "text": "ned policy in the real world in an online fashion. To achieve this, we propose a novel online adaptive learning framework that unifies residual dynamics learning with real-time policy adaptation inside a differentiable simulation.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "12": {
+    "chunk_id": "unknown_abstract_4",
+    "text": "icy adaptation inside a differentiable simulation. Starting from a simple dynamics model, our framework refines the model continuously with real-world data to capture unmodeled effects and disturbances such as payload changes and wind.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "13": {
+    "chunk_id": "unknown_abstract_5",
+    "text": "and disturbances such as payload changes and wind. The refined dynamics model is embedded in a differentiable simulation framework, enabling gradient backpropagation through the dynamics and thus rapid, sample-efficient policy updates beyond the reach of classical RL methods like PPO.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "14": {
+    "chunk_id": "unknown_abstract_6",
+    "text": "beyond the reach of classical RL methods like PPO. All components of our system are designed for rapid adaptation, enabling the policy to adjust to unseen disturbances within 5 seconds of training.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "15": {
+    "chunk_id": "unknown_abstract_7",
+    "text": "unseen disturbances within 5 seconds of training. We validate the approach on agile quadrotor control under various disturbances in both simulation and the real world.",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "16": {
+    "chunk_id": "unknown_abstract_8",
+    "text": "isturbances in both simulation and the real world. Our framework reduces hovering error by up to 81 compared to L1-MPC and 55 compared to DATT, while also demonstrating robustness in vision-based control without explicit state estimation",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "17": {
+    "chunk_id": "unknown_key_0",
+    "text": "However,\ntransferring these policies to the real world remains difficult due to the\nsim-to-real gap, where unmodeled dynamics and environmental disturbances can\ndegrade policy performance",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "18": {
+    "chunk_id": "unknown_key_1",
+    "text": "Starting from a simple dynamics model, our framework\nrefines the model continuously with real-world data to capture unmodeled\neffects and disturbances such as payload changes and wind",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "19": {
+    "chunk_id": "unknown_key_2",
+    "text": "The refined dynamics\nmodel is embedded in a differentiable simulation framework, enabling gradient\nbackpropagation through the dynamics and thus rapid, sample-efficient policy\nupdates beyond the reach of classical RL methods like PPO",
+    "paper_id": "unknown",
+    "paper_title": "Learning on the Fly: Rapid Policy Adaptation via Differentiable Simulation",
+    "authors": [
+      "Jiahe Pan",
+      "Jiaxu Xing",
+      "Rudolf Reiter",
+      "Yifan Zhai",
+      "Elie Aljalbout",
+      "Davide Scaramuzza"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.RO"
+      ]
+    }
+  },
+  "20": {
+    "chunk_id": "unknown_abstract_0",
+    "text": "In this paper, we introduce OneReward, a unified reinforcement learning framework that enhances the models generative capabilities across multiple tasks under different evaluation criteria using only textitOne Reward model.",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "21": {
+    "chunk_id": "unknown_abstract_1",
+    "text": "uation criteria using only textitOne Reward model. By employing a single vision-language model (VLM) as the generative reward model, which can distinguish the winner and loser for a given task and a given evaluation criterion, it can be effectively applied to multi-task generation models,",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "22": {
+    "chunk_id": "unknown_abstract_2",
+    "text": "fectively applied to multi-task generation models, particularly in contexts with varied data and diverse task objectives. We utilize OneReward for mask-guided image generation, which can be further divided into several sub-tasks such as image fill, image extend, object removal, and text rendering,",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "23": {
+    "chunk_id": "unknown_abstract_3",
+    "text": "image extend, object removal, and text rendering, involving a binary mask as the edit area. Although these domain-specific tasks share same conditioning paradigm, they differ significantly in underlying data distributions and evaluation metrics.",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "24": {
+    "chunk_id": "unknown_abstract_4",
+    "text": "erlying data distributions and evaluation metrics. Existing methods often rely on task-specific supervised fine-tuning (SFT), which limits generalization and training efficiency. Building on OneReward, we develop Seedream 3.",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "25": {
+    "chunk_id": "unknown_abstract_5",
+    "text": "ncy. Building on OneReward, we develop Seedream 3. 0 Fill, a mask-guided generation model trained via multi-task reinforcement learning directly on a pre-trained base model, eliminating the need for task-specific SFT.",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "26": {
+    "chunk_id": "unknown_abstract_6",
+    "text": "model, eliminating the need for task-specific SFT. Experimental results demonstrate that our unified edit model consistently outperforms both commercial and open-source competitors, such as Ideogram, Adobe Photoshop, and FLUX Fill Pro, across multiple evaluation dimensions.",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "27": {
+    "chunk_id": "unknown_abstract_7",
+    "text": "X Fill Pro, across multiple evaluation dimensions. Code and model are available at: https:one-reward",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "28": {
+    "chunk_id": "unknown_key_0",
+    "text": "By employing a single vision-language model (VLM) as the generative reward\nmodel, which can distinguish the winner and loser for a given task and a given\nevaluation criterion, it can be effectively applied to multi-task generation\nmodels, particularly in contexts with varied data and diverse task objectives",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "29": {
+    "chunk_id": "unknown_key_1",
+    "text": "In this paper, we introduce OneReward, a unified reinforcement learning\nframework that enhances the model's generative capabilities across multiple\ntasks under different evaluation criteria using only \\textit{One Reward} model",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "30": {
+    "chunk_id": "unknown_key_2",
+    "text": "Experimental results demonstrate that our unified\nedit model consistently outperforms both commercial and open-source\ncompetitors, such as Ideogram, Adobe Photoshop, and FLUX Fill [Pro], across\nmultiple evaluation dimensions",
+    "paper_id": "unknown",
+    "paper_title": "OneReward: Unified Mask-Guided Image Generation via Multi-Task Human Preference Learning",
+    "authors": [
+      "Yuan Gong",
+      "Xionghui Wang",
+      "Jie Wu",
+      "Shiyin Wang",
+      "Yitong Wang",
+      "Xinglong Wu"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.CV"
+      ]
+    }
+  },
+  "31": {
+    "chunk_id": "unknown_abstract_0",
+    "text": "As multi-turn dialogues with large language models (LLMs) grow longer and more complex, how can users better evaluate and review progress on their conversational goals? We present OnGoal, an LLM chat interface that helps users better manage goal progress.",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "32": {
+    "chunk_id": "unknown_abstract_1",
+    "text": "face that helps users better manage goal progress. OnGoal provides real-time feedback on goal alignment through LLM-assisted evaluation, explanations for evaluation results with examples, and overviews of goal progression over time, enabling users to navigate complex dialogues more effectively.",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "33": {
+    "chunk_id": "unknown_abstract_2",
+    "text": "rs to navigate complex dialogues more effectively. Through a study with 20 participants on a writing task, we evaluate OnGoal against a baseline chat interface without goal tracking.",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "34": {
+    "chunk_id": "unknown_abstract_3",
+    "text": "t a baseline chat interface without goal tracking. Using OnGoal, participants spent less time and effort to achieve their goals while exploring new prompting strategies to overcome miscommunication, suggesting tracking and visualizing goals can enhance engagement and resilience in LLM dialogues.",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "35": {
+    "chunk_id": "unknown_abstract_4",
+    "text": "nhance engagement and resilience in LLM dialogues. Our findings inspired design implications for future LLM chat interfaces that improve goal communication, reduce cognitive load, enhance interactivity, and enable feedback to improve LLM performance",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "36": {
+    "chunk_id": "unknown_key_0",
+    "text": "As multi-turn dialogues with large language models (LLMs) grow longer and\nmore complex, how can users better evaluate and review progress on their\nconversational goals? We present OnGoal, an LLM chat interface that helps users\nbetter manage goal progress",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "37": {
+    "chunk_id": "unknown_key_1",
+    "text": "Our findings inspired\ndesign implications for future LLM chat interfaces that improve goal\ncommunication, reduce cognitive load, enhance interactivity, and enable\nfeedback to improve LLM performance",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "38": {
+    "chunk_id": "unknown_key_2",
+    "text": "Using OnGoal, participants spent less time and\neffort to achieve their goals while exploring new prompting strategies to\novercome miscommunication, suggesting tracking and visualizing goals can\nenhance engagement and resilience in LLM dialogues",
+    "paper_id": "unknown",
+    "paper_title": "OnGoal: Tracking and Visualizing Conversational Goals in Multi-Turn Dialogue with Large Language Models",
+    "authors": [
+      "Adam Coscia",
+      "Shunan Guo",
+      "Eunyee Koh",
+      "Alex Endert"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "cs.HC",
+        "cs.AI",
+        "cs.LG"
+      ]
+    }
+  },
+  "39": {
+    "chunk_id": "unknown_abstract_0",
+    "text": "We investigate the role of framing in a family of 124 BPS Wilson loops in ABJ(M) theory, which define flows of supersymmetric defect field theories, interpolating between the 16 BPS and the 12 BPS superconformal fixed points.",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  },
+  "40": {
+    "chunk_id": "unknown_abstract_1",
+    "text": "16 BPS and the 12 BPS superconformal fixed points. We analyze in perturbation theory how framing affects both the expectation values of these operators and the correlation functions of local insertions on the defect, as well as its interplay with RG flow and the g-theorem.",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  },
+  "41": {
+    "chunk_id": "unknown_abstract_2",
+    "text": "l as its interplay with RG flow and the g-theorem. We obtain a non-trivial identity between the one-point function of the defect stress tensor and a Q-exact correlator, which establishes a direct link between scale invariance, superconformal invariance and framing, and clarifies the deep connection",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  },
+  "42": {
+    "chunk_id": "unknown_abstract_3",
+    "text": "nce and framing, and clarifies the deep connection between scale and cohomological anomalies. Finally, we propose a holographic interpretation of framing at strong coupling, identifying it with a coupling to the background B-field in the dual string theory",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "abstract",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  },
+  "43": {
+    "chunk_id": "unknown_key_0",
+    "text": "We obtain\na non-trivial identity between the one-point function of the defect stress\ntensor and a Q-exact correlator, which establishes a direct link between scale\ninvariance, superconformal invariance and framing, and clarifies the deep\nconnection between scale and cohomological anomalies",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  },
+  "44": {
+    "chunk_id": "unknown_key_1",
+    "text": "We investigate the role of framing in a family of 1/24 BPS Wilson loops in\nABJ(M) theory, which define flows of supersymmetric defect field theories,\ninterpolating between the 1/6 BPS and the 1/2 BPS superconformal fixed points",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  },
+  "45": {
+    "chunk_id": "unknown_key_2",
+    "text": "We analyze in perturbation theory how framing affects both the expectation\nvalues of these operators and the correlation functions of local insertions on\nthe defect, as well as its interplay with RG flow and the g-theorem",
+    "paper_id": "unknown",
+    "paper_title": "Framed defects in ABJ(M)",
+    "authors": [
+      "Marco S. Bianchi",
+      "Luigi Castiglioni",
+      "Silvia Penati",
+      "Marcia Tenser",
+      "Diego Trancanelli"
+    ],
+    "source": "unknown",
+    "chunk_type": "key_sentence",
+    "metadata": {
+      "published": "2025-08-28",
+      "citation_count": null,
+      "venue": "arXiv preprint",
+      "fields_of_study": [
+        "hep-th"
+      ]
+    }
+  }
+}
