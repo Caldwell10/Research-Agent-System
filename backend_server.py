@@ -119,14 +119,13 @@ async def initialize_system():
             if s3_bucket:
                 rag_agent = RAGAgent(
                     groq_llm=groq_llm,
-                    use_s3=True,
                     s3_bucket=s3_bucket,
                     s3_prefix=s3_prefix
                 )
                 logger.info(f"✅ RAG system initialized with S3: {s3_bucket}/{s3_prefix}")
             else:
-                rag_agent = RAGAgent(groq_llm=groq_llm)
-                logger.info("✅ RAG system initialized with local storage")
+                logger.error("❌ S3 bucket configuration required - RAG agent now requires S3 storage")
+                rag_agent = None
                 
         except Exception as e:
             logger.warning(f"⚠️ RAG system initialization failed: {e}")
