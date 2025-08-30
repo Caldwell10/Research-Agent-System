@@ -74,12 +74,13 @@ class RAGAgent:
         
         logger.info("RAG Agent initialized successfully")
     
-    def add_papers_to_knowledge_base(self, papers: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def add_papers_to_knowledge_base(self, papers: List[Dict[str, Any]], research_topic: str = None) -> Dict[str, Any]:
         """
         Add research papers to the knowledge base
         
         Args:
             papers: List of paper dictionaries from ResearcherAgent
+            research_topic: Research topic for context-specific chunk IDs
             
         Returns:
             Status dictionary with processing results
@@ -93,8 +94,8 @@ class RAGAgent:
         try:
             logger.info(f"Adding {len(papers)} papers to knowledge base...")
             
-            # Process papers into chunks
-            all_chunks = self.text_processor.batch_process_papers(papers)
+            # Process papers into chunks with topic context
+            all_chunks = self.text_processor.batch_process_papers(papers, research_topic)
             
             if not all_chunks:
                 return {

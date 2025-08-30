@@ -161,18 +161,28 @@ class TextProcessor:
         scored_sentences.sort(reverse=True, key=lambda x: x[0])
         return [sentence for _, sentence in scored_sentences[:max_sentences]]
     
-    def process_paper(self, paper: Dict[str, Any]) -> List[TextChunk]:
+    def process_paper(self, paper: Dict[str, Any], topic_context: str = None) -> List[TextChunk]:
         """
         Process a research paper into text chunks
         
         Args:
             paper: Paper dictionary with metadata and content
+            topic_context: Research topic context for unique chunk IDs
             
         Returns:
             List of TextChunk objects
         """
         chunks = []
-        paper_id = paper.get('id', paper.get('paper_id', 'unknown'))
+        paper_id = paper.get('arxiv_id', paper.get('id', paper.get('paper_id', 'unknown')))
+        
+        # Create topic-specific paper ID to avoid cross-topic duplication
+        if topic_context:
+            # Create a short hash of the topic for uniqueness
+            import hashlib
+            topic_hash = hashlib.md5(topic_context.encode()).hexdigest()[:8]
+            topic_paper_id = f"{topic_hash}_{paper_id}"
+        else:
+            topic_paper_id = paper_id
         
         # Process abstract
         abstract = paper.get('abstract', '')
@@ -183,7 +193,7 @@ class TextProcessor:
                 
                 for i, chunk_text in enumerate(abstract_chunks):
                     chunk = TextChunk(
-                        chunk_id=f"{paper_id}_abstract_{i}",
+                        chunk_id=f"{topic_paper_id}_abstract_{i}",
                         text=chunk_text,
                         paper_id=paper_id,
                         paper_title=paper.get('title', ''),
@@ -208,7 +218,7 @@ class TextProcessor:
                 
                 for i, chunk_text in enumerate(summary_chunks):
                     chunk = TextChunk(
-                        chunk_id=f"{paper_id}_summary_{i}",
+                        chunk_id=f"{topic_paper_id}_summary_{i}",
                         text=chunk_text,
                         paper_id=paper_id,
                         paper_title=paper.get('title', ''),
@@ -229,7 +239,7 @@ class TextProcessor:
             key_sentences = self.extract_key_sentences(abstract)
             for i, sentence in enumerate(key_sentences):
                 chunk = TextChunk(
-                    chunk_id=f"{paper_id}_key_{i}",
+                    chunk_id=f"{topic_paper_id}_key_{i}",
                     text=sentence,
                     paper_id=paper_id,
                     paper_title=paper.get('title', ''),
@@ -248,12 +258,13 @@ class TextProcessor:
         logger.info(f"Processed paper '{paper.get('title', '')[:50]}...' into {len(chunks)} chunks")
         return chunks
     
-    def batch_process_papers(self, papers: List[Dict[str, Any]]) -> List[TextChunk]:
+    def batch_process_papers(self, papers: List[Dict[str, Any]], topic_context: str = None) -> List[TextChunk]:
         """
         Process multiple papers into chunks
         
         Args:
             papers: List of paper dictionaries
+            topic_context: Research topic context for unique chunk IDs
             
         Returns:
             List of all text chunks
@@ -262,7 +273,7 @@ class TextProcessor:
         
         for paper in papers:
             try:
-                paper_chunks = self.process_paper(paper)
+                paper_chunks = self.process_paper(paper, topic_context)
                 all_chunks.extend(paper_chunks)
             except Exception as e:
                 logger.error(f"Error processing paper {paper.get('title', 'unknown')}: {e}")
