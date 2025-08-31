@@ -115,33 +115,50 @@ class HealthResponse(BaseModel):
 # Global variables
 research_system = None
 rag_agent = None
+rag_config = None
 
 # Initialize the research system
+def get_rag_agent():
+    """Lazy initialize RAG agent when first needed"""
+    global rag_agent, rag_config
+    if rag_agent is None and rag_config is not None:
+        logger.info("🔄 Initializing RAG agent on first use...")
+        rag_agent = RAGAgent(
+            groq_llm=rag_config['groq_llm'],
+            s3_bucket=rag_config['s3_bucket'],
+            s3_prefix=rag_config['s3_prefix']
+        )
+        logger.info("✅ RAG agent initialized successfully")
+    return rag_agent
+
 async def initialize_system():
     global research_system, rag_agent
     try:
         research_system = RateLimitedResearchSystem(max_papers=5)
         logger.info("✅ Enhanced Multi-Agent Research System initialized")
         
-        # Initialize RAG system with S3 if configured
+        # Store RAG configuration for lazy initialization
         try:
             groq_llm = GroqLLM()
             s3_bucket = os.getenv('RAG_S3_BUCKET')
             s3_prefix = os.getenv('RAG_S3_PREFIX', 'knowledge_base')
             
             if s3_bucket:
-                rag_agent = RAGAgent(
-                    groq_llm=groq_llm,
-                    s3_bucket=s3_bucket,
-                    s3_prefix=s3_prefix
-                )
-                logger.info(f"✅ RAG system initialized with S3: {s3_bucket}/{s3_prefix}")
+                # Store config for lazy initialization
+                global rag_config
+                rag_config = {
+                    'groq_llm': groq_llm,
+                    's3_bucket': s3_bucket,
+                    's3_prefix': s3_prefix
+                }
+                logger.info(f"✅ RAG system configured for lazy loading: {s3_bucket}/{s3_prefix}")
+                rag_agent = None  # Will be initialized on first use
             else:
                 logger.error("❌ S3 bucket configuration required - RAG agent now requires S3 storage")
                 rag_agent = None
                 
         except Exception as e:
-            logger.warning(f"⚠️ RAG system initialization failed: {e}")
+            logger.warning(f"⚠️ RAG system configuration failed: {e}")
             rag_agent = None
         
         return True
@@ -294,7 +311,7 @@ async def rag_chat(request: RAGChatRequest):
     """
     RAG-powered chat endpoint for research questions
     """
-    if not rag_agent:
+    if not rag_config:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
@@ -315,16 +332,16 @@ async def rag_chat(request: RAGChatRequest):
                     # Add papers to RAG knowledge base
                     papers = research_results['research_results']['papers']
                     if papers:
-                        add_result = rag_agent.add_papers_to_knowledge_base(papers, request.research_topic)
+                        add_result = get_rag_agent().add_papers_to_knowledge_base(papers, request.research_topic)
                         logger.info(f"📚 Added {len(papers)} papers to knowledge base")
                     else:
                         logger.warning("No papers found in research results")
         
         # Answer the question using RAG
-        rag_response = rag_agent.answer_question(request.question)
+        rag_response = get_rag_agent().answer_question(request.question)
         
         # Get knowledge base stats
-        kb_stats = rag_agent.get_knowledge_base_stats()
+        kb_stats = get_rag_agent().get_knowledge_base_stats()
         
         execution_time = time.time() - start_time
         
@@ -347,11 +364,11 @@ async def rag_chat(request: RAGChatRequest):
 @app.get("/api/rag/stats")
 async def rag_stats():
     """Get RAG knowledge base statistics"""
-    if not rag_agent:
+    if not rag_config:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
-        stats = rag_agent.get_knowledge_base_stats()
+        stats = get_rag_agent().get_knowledge_base_stats()
         return {
             "status": "success",
             "stats": stats,
@@ -364,18 +381,18 @@ async def rag_stats():
 @app.get("/api/rag/papers")
 async def rag_papers():
     """Get list of papers in knowledge base"""
-    if not rag_agent:
+    if not rag_config:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
         # Get papers from knowledge base metadata
-        stats = rag_agent.get_knowledge_base_stats()
+        stats = get_rag_agent().get_knowledge_base_stats()
         paper_info = []
         
         # Extract unique papers from metadata
-        if hasattr(rag_agent.vector_store, 'chunk_metadata'):
+        if hasattr(get_rag_agent().vector_store, 'chunk_metadata'):
             seen_papers = set()
-            for chunk_meta in rag_agent.vector_store.chunk_metadata.values():
+            for chunk_meta in get_rag_agent().vector_store.chunk_metadata.values():
                 paper_id = chunk_meta.get('paper_id', 'unknown')
                 if paper_id not in seen_papers:
                     seen_papers.add(paper_id)
@@ -399,14 +416,14 @@ async def rag_papers():
 @app.get("/api/rag/search-test")
 async def test_search(query: str = "reinforcement learning", limit: int = 5):
     """Test search functionality"""
-    if not rag_agent:
+    if not rag_config:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
         # Test vector search
-        results = rag_agent.vector_store.search_by_text(
+        results = get_rag_agent().vector_store.search_by_text(
             query, 
-            rag_agent.embedding_service, 
+            get_rag_agent().embedding_service, 
             k=limit
         )
         
