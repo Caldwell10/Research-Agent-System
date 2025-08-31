@@ -209,6 +209,16 @@ async def broadcast_update(event_type: str, data: dict):
 socket_app = socketio.ASGIApp(sio)
 
 # API Routes
+@app.get("/")
+async def root():
+    """Root endpoint for health checks"""
+    return {"status": "ok", "service": "Multi-Agent Research Tool"}
+
+@app.head("/")
+async def root_head():
+    """Handle HEAD requests for health checks"""
+    return {"status": "ok"}
+
 @app.get("/api/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint"""
