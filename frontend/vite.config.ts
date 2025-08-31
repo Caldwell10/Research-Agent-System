@@ -10,6 +10,19 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    // Optimize for memory-constrained environments
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          utils: ['axios', 'clsx']
+        }
+      }
+    }
+  },
   server: {
     port: 3000,
     strictPort: true,
