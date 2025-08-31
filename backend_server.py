@@ -8,9 +8,10 @@ from typing import Optional, List
 import asyncio
 import json
 import logging
+import gc
+import os
 from datetime import datetime
 import sys
-import os
 from pathlib import Path
 import socketio
 import time
@@ -27,6 +28,18 @@ from utils.groq_llm import GroqLLM
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Memory optimization settings
+def setup_memory_optimization():
+    """Configure Python for memory-efficient operation"""
+    # More aggressive garbage collection
+    gc.set_threshold(700, 10, 10)  # Trigger GC more frequently
+    
+    # Set environment variables for memory efficiency
+    os.environ['TOKENIZERS_PARALLELISM'] = 'false'  # Reduce tokenizer memory
+    os.environ['OMP_NUM_THREADS'] = '1'  # Limit OpenMP threads
+    
+    logger.info("🧠 Memory optimization configured")
 
 app = FastAPI(
     title="Multi-Agent Research API",
@@ -138,7 +151,10 @@ async def initialize_system():
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize the research system on startup"""
+    """Initialize the research system on startup with memory optimization"""
+    # Setup memory optimization first
+    setup_memory_optimization()
+    
     success = await initialize_system()
     if not success:
         logger.warning("⚠️ Research system not fully initialized - some features may not work")
@@ -311,6 +327,9 @@ async def rag_chat(request: RAGChatRequest):
         kb_stats = rag_agent.get_knowledge_base_stats()
         
         execution_time = time.time() - start_time
+        
+        # Cleanup memory after heavy RAG operations
+        gc.collect()
         
         return RAGChatResponse(
             status=rag_response['status'],

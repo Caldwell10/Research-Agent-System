@@ -18,8 +18,8 @@ echo "Current directory: $(pwd)"
 echo "Contents:"
 ls -la
 
-# Install dependencies
-npm ci --production=false
+# Install dependencies with memory optimization
+npm ci --production=false --maxsockets=1 --max-old-space-size=256
 
 # Build the frontend (skip type checking for production)
 echo "🎨 Building React frontend..."
@@ -30,7 +30,8 @@ export VITE_APP_NAME="Multi-Agent Research Tool"
 export VITE_APP_VERSION="1.0.0"
 export VITE_ENABLE_PWA="true"
 export VITE_ENABLE_ANALYTICS="false"
-npm run build:production
+# Build with memory optimization
+NODE_OPTIONS="--max-old-space-size=256" npm run build:production
 
 # Move back to root
 cd ..
