@@ -81,3 +81,5 @@ frontend/.env.production.local
 
 # API keys and sensitive config (keep .env.example)
 !.env.example
+deployment/samconfig.toml
+!deployment/samconfig.toml.example
