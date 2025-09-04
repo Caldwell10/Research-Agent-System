@@ -1,0 +1,6 @@
+# Single Page Application routing
+/*    /index.html   200
+
+# API routes - will be updated with Lambda URLs after backend deployment
+/api/*  https://2xboaqq9o0.execute-api.us-east-1.amazonaws.com/Prod/api/:splat  200
+/ws/*   wss://your-websocket-url.amazonaws.com/ws/:splat  200
