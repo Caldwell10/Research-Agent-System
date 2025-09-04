@@ -19,10 +19,10 @@ research-env/
 venv/
 env/
 
-# Output files
-outputs/
-outputs/*.json
-outputs/*.txt
+# Output files (now in data/outputs)
+data/outputs/
+data/outputs/*.json
+data/outputs/*.txt
 research_report_*.txt
 research_report_*.json
 logs/
@@ -61,3 +61,23 @@ models/
 *.h5
 *.pkl
 *.joblib
+
+# Knowledge base and vector data (large binary files)
+data/knowledge_base/
+knowledge_base/
+*.faiss
+chunk_metadata.json
+id_mapping.json
+
+# AWS and deployment artifacts
+.aws-sam/
+*.zip
+*.tar.gz
+
+# Frontend build artifacts
+frontend/dist/
+frontend/node_modules/
+frontend/.env.production.local
+
+# API keys and sensitive config (keep .env.example)
+!.env.example

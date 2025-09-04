@@ -1,5 +1,4 @@
-# backend_server.py - FastAPI server for Multi-Agent Research System
-from fastapi import FastAPI, HTTPException
+# backend_server.py from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -209,16 +208,6 @@ async def broadcast_update(event_type: str, data: dict):
 socket_app = socketio.ASGIApp(sio)
 
 # API Routes
-@app.get("/")
-async def root():
-    """Root endpoint for health checks"""
-    return {"status": "ok", "service": "Multi-Agent Research Tool"}
-
-@app.head("/")
-async def root_head():
-    """Handle HEAD requests for health checks"""
-    return {"status": "ok"}
-
 @app.get("/api/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint"""
@@ -321,7 +310,7 @@ async def rag_chat(request: RAGChatRequest):
     """
     RAG-powered chat endpoint for research questions
     """
-    if not rag_config:
+    if not rag_agent:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
@@ -374,7 +363,7 @@ async def rag_chat(request: RAGChatRequest):
 @app.get("/api/rag/stats")
 async def rag_stats():
     """Get RAG knowledge base statistics"""
-    if not rag_config:
+    if not rag_agent:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
@@ -391,7 +380,7 @@ async def rag_stats():
 @app.get("/api/rag/papers")
 async def rag_papers():
     """Get list of papers in knowledge base"""
-    if not rag_config:
+    if not rag_agent:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:
@@ -426,7 +415,7 @@ async def rag_papers():
 @app.get("/api/rag/search-test")
 async def test_search(query: str = "reinforcement learning", limit: int = 5):
     """Test search functionality"""
-    if not rag_config:
+    if not rag_agent:
         raise HTTPException(status_code=503, detail="RAG system not initialized")
     
     try:

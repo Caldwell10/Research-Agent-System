@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 RAG Agent that combines retrieval and generation for research Q&A
 """
@@ -41,17 +40,16 @@ class RAGAgent:
         logger.info("Initializing RAG components...")
         
         self.text_processor = TextProcessor()
-        self.embedding_service = EmbeddingService(lazy_load=True)
+        self.embedding_service = EmbeddingService()
         
         # Initialize S3 vector store
         if not s3_bucket:
             raise ValueError("s3_bucket is required - RAG agent now uses S3 storage only")
         
-        # Use default embedding dimension to avoid loading model during init
         self.vector_store = S3VectorStore(
             s3_bucket=s3_bucket,
             s3_prefix=s3_prefix,
-            embedding_dimension=384  # Default for all-MiniLM-L6-v2, will be updated when model loads
+            embedding_dimension=self.embedding_service.get_embedding_dimension()
         )
         logger.info(f"Using S3 vector store: {s3_bucket}/{s3_prefix}")
         

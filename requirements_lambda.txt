@@ -1,4 +1,4 @@
-# Lambda requirements (minimal for testing)
+# Lambda-specific requirements (minimal build)
 # Core Lambda adapter
 mangum>=0.17.0
 
@@ -10,7 +10,7 @@ uvicorn>=0.24.0
 python-dotenv>=1.0.0
 pydantic>=2.0.0
 
-# Basic research dependencies
+# Basic research dependencies (no heavy ML libs for now)
 arxiv>=1.4.0
 groq>=0.4.0
 requests>=2.31.0

@@ -11,14 +11,15 @@ export default defineConfig({
     },
   },
   build: {
-    // Optimize for memory-constrained environments
+    // Optimize for Amplify deployment
     chunkSizeWarningLimit: 1000,
+    outDir: 'dist',
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
-          utils: ['axios', 'clsx']
+          utils: ['axios', 'clsx', 'socket.io-client']
         }
       }
     }

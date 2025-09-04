@@ -331,5 +331,4 @@ async def test_semantic_scholar():
         await tool.close()
 
 if __name__ == "__main__":
-    # Run test if script is executed directly
     asyncio.run(test_semantic_scholar())

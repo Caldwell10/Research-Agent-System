@@ -164,17 +164,12 @@ Frontend                    Backend
 ### REST API Endpoints
 
 **Health Check:**
-- `GET /api/health` - Backend service health status
+- `GET /health` - Backend service health status
 
 **Research Operations:**
-- `POST /api/research` - Start multi-agent research process
-- `GET /api/research/summary` - Quick research summary
-
-**RAG (Q&A) Operations:**
-- `POST /api/rag/chat` - Interactive Q&A with research papers
-- `GET /api/rag/stats` - Knowledge base statistics and metrics
-- `GET /api/rag/papers` - List papers in knowledge base
-- `GET /api/rag/search-test` - Test semantic search functionality
+- `POST /research` - Start research process (fallback to HTTP)
+- `GET /research/{id}` - Retrieve research results
+- `GET /research/history` - Get research history
 
 ## System Design Patterns
 
@@ -217,40 +212,32 @@ Frontend                    Backend
 
 ```
 Multi-agent Research Tool/
-├── frontend/                         # React TypeScript frontend
+├── frontend/                    # React TypeScript frontend
 │   ├── src/
-│   │   ├── components/              # Reusable UI components
-│   │   │   ├── charts/             # Data visualization components
-│   │   │   └── __tests__/          # Component tests
-│   │   ├── contexts/               # React context providers
-│   │   ├── hooks/                  # Custom React hooks
-│   │   ├── pages/                  # Route-level components
-│   │   │   ├── ChatPage.tsx       # RAG chat interface
-│   │   │   └── ResearchPage.tsx   # Multi-agent dashboard
-│   │   ├── lib/                    # Utilities and configurations
-│   │   ├── types/                  # TypeScript type definitions
-│   │   └── test/                   # Test utilities and mocks
-│   ├── public/                     # Static assets and PWA files
-│   └── package.json                # Frontend dependencies
-├── agents/                          # AI agent implementations
-│   ├── researcher.py               # Paper search and evaluation
-│   ├── analyzer.py                 # Content analysis agent
-│   ├── reporter.py                 # Report generation agent
-│   └── rag_agent.py               # RAG Q&A agent
-├── rag/                            # RAG pipeline components
-│   ├── text_processor.py          # Document chunking & preprocessing
-│   ├── embedding_service.py       # Vector embeddings
-│   └── s3_vector_store.py         # AWS S3 vector database
-├── tools/                          # External API integrations
-│   ├── arxiv_tool.py              # ArXiv API wrapper
-│   └── semantic_scholar_tool.py   # Semantic Scholar API
-├── utils/                          # Shared utilities
-│   └── groq_llm.py               # LLM client configuration
-├── backend_server.py              # FastAPI server with WebSocket & RAG
-├── enhanced_research_system.py    # Multi-agent orchestration
-├── config.py                      # Configuration management
-├── .env                           # Environment variables (S3, API keys)
-└── requirements.txt               # Python dependencies
+│   │   ├── components/         # Reusable UI components
+│   │   │   ├── charts/        # Data visualization components
+│   │   │   └── __tests__/     # Component tests
+│   │   ├── contexts/          # React context providers
+│   │   ├── hooks/             # Custom React hooks
+│   │   ├── pages/             # Route-level components
+│   │   ├── lib/               # Utilities and configurations
+│   │   ├── types/             # TypeScript type definitions
+│   │   └── test/              # Test utilities and mocks
+│   ├── public/                # Static assets and PWA files
+│   └── package.json           # Frontend dependencies
+├── agents/                     # AI agent implementations
+│   ├── researcher.py          # Paper search and evaluation
+│   ├── analyzer.py            # Content analysis agent
+│   └── reporter.py            # Report generation agent
+├── tools/                      # External API integrations
+│   └── arxiv_tool.py          # ArXiv API wrapper
+├── utils/                      # Shared utilities
+│   └── groq_llm.py           # LLM client configuration
+├── backend_server.py          # FastAPI server with WebSocket
+├── enhanced_research_system.py # Multi-agent orchestration
+├── main.py                    # Core research system
+├── config.py                  # Configuration management
+└── requirements_backend.txt   # Python dependencies
 ```
 
 ## Getting Started
@@ -258,10 +245,8 @@ Multi-agent Research Tool/
 ### Prerequisites
 
 - **Python 3.8+** with pip
-- **Node.js 16+** with npm  
+- **Node.js 16+** with npm
 - **Groq API Key** for LLM access
-- **AWS Account** with S3 access for cloud storage (recommended)
-- **ArXiv API** access (no key required)
 
 ### Backend Setup
 
@@ -273,23 +258,14 @@ Multi-agent Research Tool/
 
 2. **Install dependencies:**
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements_backend.txt
    ```
 
 3. **Configure environment:**
    ```bash
    cp .env.example .env
-   # Edit .env file with your configuration
-   ```
-   
-   **Required environment variables:**
-   ```env
-   GROQ_API_KEY=your_groq_api_key_here
-   RAG_S3_BUCKET=your-s3-bucket-name
-   RAG_S3_PREFIX=knowledge_base
-   AWS_ACCESS_KEY_ID=your_aws_access_key
-   AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-   AWS_REGION=us-east-1
+   # Add your Groq API key to .env
+   echo "GROQ_API_KEY=your_api_key_here" >> .env
    ```
 
 4. **Start the backend server:**
@@ -349,14 +325,12 @@ The project includes comprehensive testing:
 
 ### Core Functionality
 
-- **Conversational AI Research Assistant**: Chat-based interface for natural Q&A with academic papers
-- **Multi-Agent Research Pipeline**: Automated paper discovery, analysis, and reporting
-- **RAG-Powered Knowledge Base**: Semantic search through processed research papers
+- **Intelligent Paper Search**: AI-powered relevance scoring and filtering
 - **Real-time Progress Tracking**: Live updates during research process
-- **Cloud Vector Storage**: AWS S3-based scalable knowledge base
 - **Interactive Visualizations**: Charts for relevance scores, publication timelines, and categories
 - **Export Capabilities**: Multiple format support (JSON, PDF, CSV, BibTeX)
-- **Topic-Specific Research**: Expandable knowledge base with research topic categorization
+- **Favorites Management**: Save and organize papers with collections
+- **Search History**: Track and revisit previous research queries
 - **Mobile-First Design**: Responsive interface optimized for all devices
 
 ### Advanced Features
@@ -379,9 +353,9 @@ The project includes comprehensive testing:
 - `npm run type-check` - TypeScript type checking
 
 **Backend:**
-- `python backend_server.py` - Start FastAPI server with RAG support
-- `python test_system.py` - Test multi-agent system (if available)
-- `python enhanced_research_system.py` - Direct system testing
+- `python backend_server.py` - Start FastAPI server
+- `python test_system.py` - Test multi-agent system
+- `python main.py "query"` - Direct CLI research
 
 ### Code Quality
 
@@ -410,17 +384,7 @@ The project includes comprehensive testing:
 
 **Backend (.env):**
 ```env
-# Core API Configuration
 GROQ_API_KEY=your_groq_api_key
-
-# AWS S3 Configuration (Required for RAG)
-RAG_S3_BUCKET=your-s3-bucket-name
-RAG_S3_PREFIX=knowledge_base
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key  
-AWS_REGION=us-east-1
-
-# Research Configuration
 MAX_PAPERS=10
 RATE_LIMIT_REQUESTS=100
 RATE_LIMIT_WINDOW=3600
@@ -431,6 +395,18 @@ RATE_LIMIT_WINDOW=3600
 VITE_API_URL=http://localhost:8000
 VITE_WS_URL=ws://localhost:8000
 ```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ##  Acknowledgments
 

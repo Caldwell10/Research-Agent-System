@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Multi-Agent Research Tool Backend
+
+Globals:
+  Function:
+    Timeout: 900  # 15 minutes for research operations
+    MemorySize: 3008  # Maximum memory for AI operations
+    Environment:
+      Variables:
+        GROQ_API_KEY: !Ref GroqApiKey
+        MAX_PAPERS: 10
+        RATE_LIMIT_REQUESTS: 100
+        RATE_LIMIT_WINDOW: 3600
+        ENVIRONMENT: production
+        TOKENIZERS_PARALLELISM: "false"
+        OMP_NUM_THREADS: "1"
+        S3_BUCKET_NAME: "caldwell-research-kb-570466"
+
+Parameters:
+  GroqApiKey:
+    Type: String
+    Description: Groq API Key for LLM operations
+    NoEcho: true
+
+Resources:
+  # Main API Lambda Function
+  MultiAgentResearchApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: lambda_handler.lambda_handler
+      Runtime: python3.11
+      Architectures:
+        - x86_64
+      Events:
+        ApiGateway:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        RootPath:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: multi-agent-research
+          S3_BUCKET_NAME: "caldwell-research-kb-570466"
+      Policies:
+        - S3ReadPolicy:
+            BucketName: "caldwell-research-kb-570466"
+        - S3WritePolicy:
+            BucketName: "caldwell-research-kb-570466"
+
+  # CloudWatch Log Group
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${MultiAgentResearchApi}"
+      RetentionInDays: 30
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiUrl"
+      
+  LambdaFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt MultiAgentResearchApi.Arn
