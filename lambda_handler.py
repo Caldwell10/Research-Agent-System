@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 handler = Mangum(
     app,
     lifespan="off",  # Disable lifespan for Lambda
-    api_gateway_base_path="/prod",  # API Gateway stage path
+    api_gateway_base_path="/Prod",  # API Gateway stage path
 )
 
 def lambda_handler(event, context):
