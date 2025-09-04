@@ -11,9 +11,10 @@ frontend:
         - npm run build
         - ls -la dist/
         - cd ..
-        - ls -la frontend/dist/
+        - cp -r frontend/dist ./dist
+        - ls -la dist/
   artifacts:
-    baseDirectory: frontend/dist
+    baseDirectory: dist
     files:
       - '**/*'
   cache:
