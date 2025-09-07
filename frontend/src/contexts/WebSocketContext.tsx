@@ -31,7 +31,8 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
   const [messages, setMessages] = useState<WebSocketMessage[]>([])
 
   useEffect(() => {
-    const socketInstance = io('http://localhost:8000', {
+    const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:8000'
+    const socketInstance = io(WS_URL, {
       transports: ['polling', 'websocket'],
       autoConnect: true,
       reconnection: true,

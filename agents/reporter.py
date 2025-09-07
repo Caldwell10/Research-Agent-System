@@ -284,9 +284,26 @@ Keep it concise but informative - someone should be able to read this in 2 minut
     def _save_report(self, report: Dict) -> str:
         """Save report to file"""
         
-        # Create outputs directory if it doesn't exist
-        outputs_dir = "outputs"
-        os.makedirs(outputs_dir, exist_ok=True)
+        # Create outputs directory if it doesn't exist - use /tmp in Lambda
+        # Check multiple Lambda environment indicators for robustness
+        is_lambda = (
+            os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or 
+            os.environ.get("AWS_EXECUTION_ENV") or 
+            os.environ.get("LAMBDA_TASK_ROOT") or
+            "/var/task" in os.getcwd()
+        )
+        outputs_dir = "/tmp/outputs" if is_lambda else "outputs"
+        
+        # Log the directory decision for debugging
+        logger.info(f"Lambda detection: {is_lambda}, Using outputs directory: {outputs_dir}")
+        logger.info(f"Current working directory: {os.getcwd()}")
+        
+        try:
+            os.makedirs(outputs_dir, exist_ok=True)
+            logger.info(f"Successfully created directory: {outputs_dir}")
+        except Exception as e:
+            logger.error(f"Failed to create directory {outputs_dir}: {e}")
+            raise
         
         # Generate filename
         query = report["metadata"]["research_query"]
