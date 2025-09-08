@@ -6,7 +6,7 @@ Adapts FastAPI app for AWS Lambda execution
 import json
 import base64
 from mangum import Mangum
-from backend_lambda import app  # Use full backend
+from backend_lambda import app  # Use full backend with container deployment
 import logging
 
 # Configure logging for Lambda
