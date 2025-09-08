@@ -1,6 +1,6 @@
 """
-Lambda-optimized backend server
-Removes WebSocket functionality and optimizes for serverless deployment
+Railway-compatible backend server
+Simple FastAPI server for multi-agent research system
 """
 
 from fastapi import FastAPI, HTTPException
@@ -11,14 +11,13 @@ from typing import Optional
 import asyncio
 import json
 import logging
-import gc
 import os
 from datetime import datetime
 import sys
 from pathlib import Path
 import time
 
-# Set up logging for Lambda
+# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -26,7 +25,7 @@ logger = logging.getLogger(__name__)
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-# Import the enhanced multi-agent system - with error handling
+# Import the enhanced multi-agent system
 try:
     from enhanced_research_system import RateLimitedResearchSystem
     RESEARCH_SYSTEM_AVAILABLE = True
@@ -36,52 +35,34 @@ except ImportError as e:
     RateLimitedResearchSystem = None
     logger.warning(f"Research system not available: {e}")
 
-# Simplified backend with just the three specialized agents
-# No RAG functionality needed
-logger.info("Backend initialized - ML dependencies will be loaded on demand")
-
-# Memory optimization for Lambda
-def setup_lambda_optimization():
-    """Configure Python for Lambda-efficient operation"""
-    gc.set_threshold(700, 10, 10)
-    os.environ['TOKENIZERS_PARALLELISM'] = 'false'
-    os.environ['OMP_NUM_THREADS'] = '1'
-    logger.info("🧠 Lambda optimization configured")
-
-# Initialize optimization
-setup_lambda_optimization()
-
 app = FastAPI(
     title="Multi-Agent Research API",
-    description="API for the Multi-Agent Research Paper Analysis System (Lambda)",
-    version="1.0.0",
-    root_path="/prod"  # API Gateway stage path
+    description="API for the Multi-Agent Research Paper Analysis System",
+    version="1.0.0"
 )
 
-# Configure CORS for Lambda
+# Configure CORS - Allow all origins for Railway deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for Lambda
-    allow_credentials=False,  # Disable credentials for Lambda
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Global variables
+# Global research system instance
 research_system = None
 
-# Data models (same as original)
+# Data models
 class ResearchRequest(BaseModel):
     query: str
     max_papers: Optional[int] = 5
-    filters: Optional[dict] = {}
 
 class HealthResponse(BaseModel):
     status: str
     timestamp: str
     version: str
     memory_usage: Optional[dict] = None
-
 
 # Initialize research system
 async def get_research_system():
@@ -96,14 +77,15 @@ async def get_research_system():
             research_system = RateLimitedResearchSystem()
             logger.info("✅ Research system initialized")
         except Exception as e:
-            logger.error(f"❌ Failed to initialize research system: {str(e)}")
-            raise HTTPException(status_code=500, detail="Failed to initialize research system")
+            logger.error(f"❌ Failed to initialize research system: {e}")
+            raise HTTPException(status_code=503, detail=f"System initialization failed: {str(e)}")
+    
     return research_system
 
 # Health check endpoint
 @app.get("/api/health", response_model=HealthResponse)
 async def health_check():
-    """Health check endpoint for Lambda"""
+    """Health check endpoint"""
     memory_usage = None
     try:
         import psutil
@@ -124,31 +106,45 @@ async def health_check():
         memory_usage=memory_usage
     )
 
-# Research endpoint (HTTP only, no WebSocket)
+# Research endpoint
 @app.post("/api/research")
 async def start_research(request: ResearchRequest):
-    """Start research process (Lambda version - returns results immediately)"""
+    """Start research analysis"""
     try:
-        system = await get_research_system()
-        
         logger.info(f"🔍 Starting research for: {request.query}")
         start_time = time.time()
         
-        # Run research synchronously in Lambda
-        results = await system.research_papers_async(
+        system = await get_research_system()
+        
+        # Progress callback for real-time updates
+        progress_updates = []
+        
+        async def progress_callback(stage: str, message: str):
+            timestamp = datetime.now().isoformat()
+            progress_updates.append({
+                "stage": stage,
+                "message": message,
+                "timestamp": timestamp
+            })
+            logger.info(f"Progress - {stage}: {message}")
+        
+        # Execute research with progress tracking
+        results = await system.research_topic_with_progress(
             query=request.query,
-            max_papers=request.max_papers,
-            filters=request.filters or {}
+            save_report=True,
+            progress_callback=progress_callback
         )
         
         duration = time.time() - start_time
-        logger.info(f"✅ Research completed in {duration:.2f} seconds")
+        
+        # Add progress updates to results
+        results["progress_updates"] = progress_updates
+        results["duration"] = duration
         
         return {
             "status": "completed",
             "results": results,
             "query": request.query,
-            "duration": duration,
             "timestamp": datetime.now().isoformat()
         }
         
@@ -156,18 +152,27 @@ async def start_research(request: ResearchRequest):
         logger.error(f"❌ Research failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 # Root API endpoint
 @app.get("/api/")
 async def api_root():
     """API root endpoint"""
     return {
-        "message": "Multi-Agent Research API (Lambda)",
+        "message": "Multi-Agent Research API (Railway)",
         "version": "1.0.0",
         "endpoints": {
             "health": "/api/health",
             "research": "/api/research"
         }
+    }
+
+# Root endpoint
+@app.get("/")
+async def root():
+    """Root endpoint"""
+    return {
+        "message": "Multi-Agent Research API", 
+        "status": "running",
+        "platform": "Railway"
     }
 
 # Error handlers
@@ -186,13 +191,14 @@ async def internal_error_handler(request, exc):
         content={"error": "Internal server error", "message": str(exc)}
     )
 
-# Lambda startup optimization - disabled pre-warming to reduce cold start time
+# Startup event
 @app.on_event("startup")
 async def startup_event():
-    """Lambda startup event - lightweight initialization"""
-    logger.info("🚀 Lambda function starting up...")
-    logger.info("✅ Lambda function ready - research system will be initialized on first request")
+    """Startup event"""
+    logger.info("🚀 Backend server starting up...")
+    logger.info("✅ Backend server ready")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

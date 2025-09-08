@@ -1,16 +1,14 @@
-# Multi-Agent Research Tool - Lambda Deployment Requirements
-# Core Lambda adapter
-mangum>=0.17.0
+# Multi-Agent Research Tool - Render Deployment Requirements
 
 # FastAPI and server
 fastapi>=0.104.1
-uvicorn>=0.24.0
+uvicorn[standard]>=0.24.0
 
 # Environment and configuration
 python-dotenv>=1.0.0
 pydantic>=2.0.0
 
-# LangChain core dependencies
+# LangChain dependencies (required for agents)
 langchain>=0.1.0
 langchain-core>=0.3.0
 
@@ -25,10 +23,21 @@ requests>=2.31.0
 aiohttp>=3.8.0
 aiofiles>=23.0.0
 
-# AWS and Lambda utilities
-boto3>=1.34.0
-botocore>=1.29.0
-aws-lambda-powertools>=2.0.0
-
 # System utilities
 psutil>=5.9.0
+
+# Additional LangChain dependencies
+langchain-text-splitters>=0.3.0
+langsmith>=0.1.17
+
+# JSON and data handling
+orjson>=3.9.0
+
+# HTTP client libraries
+httpx>=0.24.0
+
+# Retry and stability
+tenacity>=8.0.0
+
+# SQL and data persistence
+sqlalchemy>=2.0.0
