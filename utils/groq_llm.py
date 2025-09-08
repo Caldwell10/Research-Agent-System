@@ -7,7 +7,7 @@ class GroqLLM(LLM):
     """Custom LangChain wrapper for Groq API"""
     
     client: Groq = None
-    model_name: str = "llama3-8b-8192"
+    model_name: str = "llama-3.1-8b-instant"
     temperature: float = 0.1
     max_tokens: int = 1024
     
