@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Home, Search, MessageCircle, History, Heart } from 'lucide-react'
+import { Home, Search, History, Heart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface TabItem {
@@ -13,7 +13,6 @@ interface TabItem {
 const tabs: TabItem[] = [
   { name: 'Home', href: '/', icon: Home, label: 'Home' },
   { name: 'Research', href: '/research', icon: Search, label: 'Search' },
-  { name: 'Chat', href: '/chat', icon: MessageCircle, label: 'Chat' },
   { name: 'History', href: '/history', icon: History, label: 'History' },
   { name: 'Favorites', href: '/favorites', icon: Heart, label: 'Saved' },
 ]
