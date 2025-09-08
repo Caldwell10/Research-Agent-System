@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: multi-agent-research-backend
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python backend_server.py"
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GROQ_API_KEY
+        sync: false  # This will be set manually in Render dashboard
