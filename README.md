@@ -1,10 +1,10 @@
 # Multi-Agent Research Tool
 
-A sophisticated AI-powered research assistant that combines multi-agent systems with RAG (Retrieval-Augmented Generation) technology to provide intelligent research paper analysis, conversational Q&A, and comprehensive insights from academic literature.
+A sophisticated AI-powered research assistant that combines three specialized AI agents to provide intelligent research paper analysis and comprehensive insights from academic literature.
 
 ## Overview
 
-The Multi-Agent Research Tool is a production-ready SaaS platform that combines multiple specialized AI agents with advanced RAG capabilities. The system features a modern React-based chat interface with real-time WebSocket communication to a FastAPI backend that orchestrates research agents and provides intelligent Q&A through semantic search of academic papers stored in AWS S3.
+The Multi-Agent Research Tool is a modern web application featuring a React-based frontend hosted on AWS Amplify and a FastAPI backend deployed on Render. The system orchestrates three specialized AI agents to discover, analyze, and report on academic papers from ArXiv and Semantic Scholar.
 
 ## System Architecture
 
@@ -12,52 +12,40 @@ The Multi-Agent Research Tool is a production-ready SaaS platform that combines 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Frontend (React/TS)                  │
+│                   Frontend (AWS Amplify)                    │
 ├─────────────────────────────────────────────────────────────┤
-│ • ChatPage.tsx (RAG Chat Interface)                         │
-│ • ResearchPage.tsx (Research Dashboard)                     │  
-│ • Layout.tsx (Navigation & Routing)                         │
-│ • Real-time WebSocket Connection                            │
+│ • ResearchPage.tsx (Research Dashboard)                     │
+│ • Real-time Progress Updates                                │
+│ • Data Visualizations & Export                              │
+│ • Mobile-First Responsive Design                            │
+└─────────────────────────────────────────────────────────────┘
+                                │
+                            HTTPS/REST
+                                ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   Backend API (Render)                      │
+├─────────────────────────────────────────────────────────────┤
+│ • /api/research (Multi-Agent Research Endpoint)             │
+│ • /api/health (Service Health Check)                        │
+│ • FastAPI with unlimited execution time                     │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   Backend API (FastAPI)                     │
+│                  Three-Agent System                         │
 ├─────────────────────────────────────────────────────────────┤
-│ • /api/rag/chat (RAG Q&A Endpoint)                          │
-│ • /api/research (Multi-Agent Research)                      │
-│ • /api/rag/stats (Knowledge Base Stats)                     │
-│ • WebSocket Support for Real-time Updates                   │
-└─────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Multi-Agent System                       │
-├─────────────────────────────────────────────────────────────┤
-│ • ResearcherAgent (Paper Discovery)                         │
-│ • AnalyzerAgent (Content Analysis)                          │  
-│ • ReporterAgent (Report Generation)                         │
-│ • RAGAgent (Q&A Intelligence)                               │
-└─────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    RAG Pipeline                             │
-├─────────────────────────────────────────────────────────────┤
-│ • TextProcessor (Document Chunking)                         │
-│ • EmbeddingService (Vector Generation)                      │
-│ • S3VectorStore (Cloud Similarity Search)                   │
-│ • Knowledge Base Management                                 │  
+│ • ResearcherAgent (Paper Discovery & Filtering)             │
+│ • AnalyzerAgent (Content Analysis & Insights)               │  
+│ • ReporterAgent (Report Generation & Summary)               │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  External Services                          │
 ├─────────────────────────────────────────────────────────────┤
-│ • ArXiv API (Academic Papers)                               │
+│ • ArXiv API (Academic Paper Search)                         │
 │ • Semantic Scholar API (Research Metadata)                  │
-│ • AWS S3 (Vector Storage)                                   │
-│ • Groq LLM (Language Generation)                            │
+│ • Groq LLM (AI Analysis & Generation)                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -96,8 +84,8 @@ The backend is a FastAPI application with WebSocket support and multi-agent orch
 - **Uvicorn**: ASGI server for high-performance async applications
 - **Pydantic**: Data validation and serialization
 
-#### Multi-Agent System
-The system employs four specialized AI agents:
+#### Three-Agent System
+The system employs three specialized AI agents working in sequence:
 
 1. **Researcher Agent** (`researcher.py`)
    - Searches ArXiv and Semantic Scholar for relevant papers
@@ -114,62 +102,35 @@ The system employs four specialized AI agents:
    - Generates comprehensive research summaries
    - Creates actionable insights and recommendations
 
-4. **RAG Agent** (`rag_agent.py`)
-   - Manages conversational Q&A with academic papers
-   - Processes papers into semantic text chunks
-   - Provides contextual answers with citations
-
-#### RAG (Retrieval-Augmented Generation) System
-- **Text Processing**: Intelligent document chunking with overlap prevention
-- **Vector Embeddings**: Semantic similarity using sentence transformers
-- **Cloud Storage**: AWS S3-based vector database for scalability
-- **Smart Search**: Context-aware retrieval with relevance scoring
-- **Conversation Memory**: Multi-turn dialogue support
-
 #### External Integrations
 - **ArXiv API**: Academic paper search and retrieval
 - **Semantic Scholar API**: Enhanced paper metadata and citations
-- **AWS S3**: Cloud vector storage and knowledge base persistence
-- **Groq LLM**: High-performance language model for analysis and Q&A
+- **Groq LLM**: High-performance language model for analysis and generation
 - **Rate Limiting**: Intelligent API call management and cost optimization
 
 ## Frontend-Backend Communication
 
-### WebSocket Communication Pattern
-
-The system uses Socket.IO for real-time communication with the following event flow:
+The system uses HTTP REST API communication with progress tracking:
 
 ```
 Frontend                    Backend
     │                         │
-    │──── search_request ────►│
-    │                         │ ┌─ Agent Research Process
-    │◄─── research_started ───│ │
-    │◄─── research_progress ──│ │ (Multiple progress updates)
-    │◄─── research_complete ──│ └─ Final results
-    │                         │
+    │──── POST /api/research ─►│
+    │                         │ ┌─ Three-Agent Process
+    │◄──── HTTP Response ─────│ │ 1. Research papers
+    │       (with progress)    │ │ 2. Analyze content
+    │                         │ │ 3. Generate report
+    │                         │ └─ Return results
 ```
-
-#### WebSocket Events
-
-**Client → Server:**
-- `search_request`: Initiates research with query parameters
-
-**Server → Client:**
-- `research_started`: Confirms research initiation
-- `research_progress`: Real-time progress updates from agents
-- `research_complete`: Final results with papers and analysis
-- `error`: Error notifications
 
 ### REST API Endpoints
 
 **Health Check:**
-- `GET /health` - Backend service health status
+- `GET /api/health` - Backend service health status
 
 **Research Operations:**
-- `POST /research` - Start research process (fallback to HTTP)
-- `GET /research/{id}` - Retrieve research results
-- `GET /research/history` - Get research history
+- `POST /api/research` - Start multi-agent research process
+- `GET /api/` - API information and available endpoints
 
 ## System Design Patterns
 
@@ -178,10 +139,10 @@ Frontend                    Backend
 - **Implementation**: Specialized agents with distinct responsibilities
 - **Benefits**: Modular, scalable, and maintainable code structure
 
-### 2. **Observer Pattern (WebSocket Events)**
-- **Pattern**: Real-time event-driven communication
-- **Implementation**: Socket.IO event handling with progress callbacks
-- **Benefits**: Responsive UI with live progress updates
+### 2. **Progress Tracking Pattern**
+- **Pattern**: Embedded progress reporting in HTTP responses
+- **Implementation**: Research system includes progress updates in response data
+- **Benefits**: User feedback without WebSocket complexity
 
 ### 3. **Repository Pattern**
 - **Pattern**: Data access abstraction
@@ -212,7 +173,7 @@ Frontend                    Backend
 
 ```
 Multi-agent Research Tool/
-├── frontend/                    # React TypeScript frontend
+├── frontend/                    # React TypeScript frontend (AWS Amplify)
 │   ├── src/
 │   │   ├── components/         # Reusable UI components
 │   │   │   ├── charts/        # Data visualization components
@@ -230,14 +191,16 @@ Multi-agent Research Tool/
 │   ├── analyzer.py            # Content analysis agent
 │   └── reporter.py            # Report generation agent
 ├── tools/                      # External API integrations
-│   └── arxiv_tool.py          # ArXiv API wrapper
+│   ├── arxiv_tool.py          # ArXiv API wrapper
+│   └── semantic_scholar_tool.py # Semantic Scholar API
 ├── utils/                      # Shared utilities
 │   └── groq_llm.py           # LLM client configuration
-├── backend_server.py          # FastAPI server with WebSocket
+├── backend_server.py          # FastAPI server (Render deployment)
 ├── enhanced_research_system.py # Multi-agent orchestration
 ├── main.py                    # Core research system
 ├── config.py                  # Configuration management
-└── requirements_backend.txt   # Python dependencies
+├── render.yaml               # Render deployment configuration
+└── requirements.txt          # Python dependencies
 ```
 
 ## Getting Started
@@ -366,34 +329,30 @@ The project includes comprehensive testing:
 
 ## 🏗️ Deployment
 
-### Production Build
+### Production Deployment
 
-1. **Build frontend:**
-   ```bash
-   cd frontend
-   npm run build
-   ```
+**Frontend (AWS Amplify):**
+- Connected to GitHub repository for automatic deployments
+- Frontend builds and deploys automatically on commits
+- Environment variables configured in Amplify console
 
-2. **Configure backend for production:**
-   ```bash
-   export NODE_ENV=production
-   uvicorn backend_server:app --host 0.0.0.0 --port 8000
-   ```
+**Backend (Render):**
+- Connected to GitHub repository
+- Automatically deploys from `render.yaml` configuration
+- Environment variables configured in Render dashboard
 
 ### Environment Variables
 
-**Backend (.env):**
+**Backend (Render):**
 ```env
-GROQ_API_KEY=your_groq_api_key
-MAX_PAPERS=10
-RATE_LIMIT_REQUESTS=100
-RATE_LIMIT_WINDOW=3600
+GROQ_API_KEY=your_groq_api_key_here
+PORT=10000
 ```
 
-**Frontend:**
+**Frontend (Amplify):**
 ```env
-VITE_API_URL=http://localhost:8000
-VITE_WS_URL=ws://localhost:8000
+VITE_API_URL=https://your-render-app.onrender.com
+VITE_WS_URL=https://your-render-app.onrender.com
 ```
 
 ## 🤝 Contributing
