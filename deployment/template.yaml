@@ -22,15 +22,18 @@ Parameters:
     Type: String
     Description: Groq API Key for LLM operations
     NoEcho: true
+  ImageUri:
+    Type: String
+    Description: Docker image URI from ECR
+    Default: 050451400667.dkr.ecr.us-east-1.amazonaws.com/multi-agent-research-backend:single-arch
 
 Resources:
-  # Main API Lambda Function
+  # Main API Lambda Function (Container Image)
   MultiAgentResearchApi:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: lambda_handler.lambda_handler
-      Runtime: python3.11
+      PackageType: Image
+      ImageUri: !Ref ImageUri
       Architectures:
         - x86_64
       Events:

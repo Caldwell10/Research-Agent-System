@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 import asyncio
 import json
 import logging
@@ -18,18 +18,27 @@ import sys
 from pathlib import Path
 import time
 
+# Set up logging for Lambda
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Add project root to path for imports
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-# Import the enhanced multi-agent system
-from enhanced_research_system import RateLimitedResearchSystem
-from agents.rag_agent import RAGAgent
-from utils.groq_llm import GroqLLM
+# Import the enhanced multi-agent system - with error handling
+try:
+    from enhanced_research_system import RateLimitedResearchSystem
+    RESEARCH_SYSTEM_AVAILABLE = True
+    logger.info("Research system module loaded successfully")
+except ImportError as e:
+    RESEARCH_SYSTEM_AVAILABLE = False
+    RateLimitedResearchSystem = None
+    logger.warning(f"Research system not available: {e}")
 
-# Set up logging for Lambda
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Simplified backend with just the three specialized agents
+# No RAG functionality needed
+logger.info("Backend initialized - ML dependencies will be loaded on demand")
 
 # Memory optimization for Lambda
 def setup_lambda_optimization():
@@ -73,28 +82,17 @@ class HealthResponse(BaseModel):
     version: str
     memory_usage: Optional[dict] = None
 
-class RAGChatRequest(BaseModel):
-    message: str
-    conversation_id: Optional[str] = None
-
-class RAGChatResponse(BaseModel):
-    response: str
-    conversation_id: str
-    sources: List[dict] = []
-    timestamp: str
 
 # Initialize research system
 async def get_research_system():
-    """Initialize research system with lazy loading and S3 configuration"""
+    """Initialize research system"""
     global research_system
+    if not RESEARCH_SYSTEM_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Research system not available - missing dependencies")
+    
     if research_system is None:
         try:
             logger.info("🔄 Initializing research system...")
-            
-            # Get S3 bucket name from environment
-            s3_bucket = os.getenv("S3_BUCKET_NAME", "caldwell-research-kb-570466")
-            logger.info(f"🪣 Using S3 bucket: {s3_bucket}")
-            
             research_system = RateLimitedResearchSystem()
             logger.info("✅ Research system initialized")
         except Exception as e:
@@ -106,19 +104,24 @@ async def get_research_system():
 @app.get("/api/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint for Lambda"""
-    import psutil
-    process = psutil.Process()
-    memory_info = process.memory_info()
+    memory_usage = None
+    try:
+        import psutil
+        process = psutil.Process()
+        memory_info = process.memory_info()
+        memory_usage = {
+            "rss": memory_info.rss,
+            "vms": memory_info.vms,
+            "cpu_percent": process.cpu_percent()
+        }
+    except ImportError:
+        logger.warning("psutil not available - memory stats disabled")
     
     return HealthResponse(
         status="healthy",
         timestamp=datetime.now().isoformat(),
         version="1.0.0",
-        memory_usage={
-            "rss": memory_info.rss,
-            "vms": memory_info.vms,
-            "cpu_percent": process.cpu_percent()
-        }
+        memory_usage=memory_usage
     )
 
 # Research endpoint (HTTP only, no WebSocket)
@@ -153,55 +156,6 @@ async def start_research(request: ResearchRequest):
         logger.error(f"❌ Research failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# RAG Chat endpoint
-@app.post("/api/rag/chat", response_model=RAGChatResponse)
-async def rag_chat(request: RAGChatRequest):
-    """Process RAG chat request"""
-    try:
-        system = await get_research_system()
-        
-        # Initialize RAG agent if not exists
-        if not hasattr(system, 'rag_agent'):
-            logger.info("🔄 Initializing RAG agent...")
-            s3_bucket = os.getenv("S3_BUCKET_NAME", "caldwell-research-kb-570466")
-            groq_llm = GroqLLM()
-            system.rag_agent = RAGAgent(groq_llm=groq_llm, s3_bucket=s3_bucket)
-        
-        # Process the chat request
-        response_data = await system.rag_agent.chat(
-            message=request.message,
-            conversation_id=request.conversation_id
-        )
-        
-        return RAGChatResponse(
-            response=response_data.get("response", ""),
-            conversation_id=response_data.get("conversation_id", ""),
-            sources=response_data.get("sources", []),
-            timestamp=datetime.now().isoformat()
-        )
-        
-    except Exception as e:
-        logger.error(f"❌ RAG chat failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-# RAG stats endpoint
-@app.get("/api/rag/stats")
-async def get_rag_stats():
-    """Get RAG knowledge base statistics"""
-    try:
-        system = await get_research_system()
-        
-        if not hasattr(system, 'rag_agent'):
-            s3_bucket = os.getenv("S3_BUCKET_NAME", "caldwell-research-kb-570466")
-            groq_llm = GroqLLM()
-            system.rag_agent = RAGAgent(groq_llm=groq_llm, s3_bucket=s3_bucket)
-        
-        stats = await system.rag_agent.get_knowledge_base_stats()
-        return stats
-        
-    except Exception as e:
-        logger.error(f"❌ Failed to get RAG stats: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
 
 # Root API endpoint
 @app.get("/api/")
@@ -212,9 +166,7 @@ async def api_root():
         "version": "1.0.0",
         "endpoints": {
             "health": "/api/health",
-            "research": "/api/research",
-            "rag_chat": "/api/rag/chat",
-            "rag_stats": "/api/rag/stats"
+            "research": "/api/research"
         }
     }
 
@@ -234,14 +186,12 @@ async def internal_error_handler(request, exc):
         content={"error": "Internal server error", "message": str(exc)}
     )
 
-# Lambda startup optimization
+# Lambda startup optimization - disabled pre-warming to reduce cold start time
 @app.on_event("startup")
 async def startup_event():
-    """Lambda startup event"""
+    """Lambda startup event - lightweight initialization"""
     logger.info("🚀 Lambda function starting up...")
-    # Pre-warm the research system
-    await get_research_system()
-    logger.info("✅ Lambda function ready")
+    logger.info("✅ Lambda function ready - research system will be initialized on first request")
 
 if __name__ == "__main__":
     import uvicorn

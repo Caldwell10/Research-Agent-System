@@ -116,7 +116,7 @@ class RateLimitedResearchSystem:
             return final_results
             
         except Exception as e:
-            logger.error(f"❌ Error in enhanced research pipeline: {e}")
+            logger.error(f" Error in research pipeline: {e}")
             return {
                 "status": "error",
                 "message": str(e),
@@ -167,3 +167,57 @@ class RateLimitedResearchSystem:
     def quick_research(self, query: str, max_papers: int = 3):
         """Quick research mode (synchronous)"""
         return self.base_system.quick_research(query, max_papers)
+    
+    async def research_papers_async(
+        self, 
+        query: str, 
+        max_papers: int = 5,
+        filters: dict = None
+    ) -> Dict[str, Any]:
+        """
+        Async research method for Lambda backend compatibility
+        
+        Args:
+            query: Research question
+            max_papers: Maximum number of papers to research
+            filters: Optional filters to apply
+        
+        Returns:
+            Dict containing research results
+        """
+        try:
+            logger.info(f"Starting async research for: {query}")
+            
+            # Use the existing research_topic_with_progress method
+            # Note: max_papers and filters parameters are for future enhancement
+            results = await self.research_topic_with_progress(
+                query=query,
+                save_report=False  # Don't save reports in Lambda
+            )
+            
+            # Format results for API response
+            if results.get('status') == 'success':
+                return {
+                    'status': 'success',
+                    'query': query,
+                    'results': results.get('results', {}),
+                    'papers_found': results.get('papers_found', 0),
+                    'summary': results.get('summary', ''),
+                    'timestamp': results.get('timestamp')
+                }
+            else:
+                return {
+                    'status': 'error',
+                    'query': query,
+                    'error': results.get('error', 'Unknown error occurred'),
+                    'timestamp': time.time()
+                }
+                
+        except Exception as e:
+            logger.error(f"Async research failed: {str(e)}")
+            return {
+                'status': 'error',
+                'query': query,
+                'error': str(e),
+                'timestamp': time.time()
+            }

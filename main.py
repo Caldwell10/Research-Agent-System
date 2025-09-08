@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Add project root to path for imports
+# Project root to path for imports
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
@@ -15,11 +15,10 @@ load_dotenv()
 # Import agents and utilities
 from utils.groq_llm import GroqLLM
 from agents.researcher import ResearcherAgent
-from agents.enhanced_researcher import EnhancedResearcherAgent
 from agents.analyzer import AnalyzerAgent
 from agents.reporter import ReporterAgent
 
-# Set up logging
+#  logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
