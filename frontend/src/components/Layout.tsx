@@ -6,7 +6,6 @@ import MobileBottomNav from './MobileBottomNav'
 import { 
   Home, 
   Search, 
-  MessageCircle,
   History, 
   Heart,
   Sun, 
@@ -25,7 +24,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigation = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Research', href: '/research', icon: Search },
-    { name: 'Chat', href: '/chat', icon: MessageCircle },
     { name: 'History', href: '/history', icon: History },
     { name: 'Favorites', href: '/favorites', icon: Heart },
   ]
