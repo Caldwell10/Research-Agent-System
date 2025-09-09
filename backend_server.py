@@ -16,6 +16,7 @@ from datetime import datetime
 import sys
 from pathlib import Path
 import time
+import psutil
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -77,7 +78,7 @@ async def get_research_system():
             research_system = RateLimitedResearchSystem()
             logger.info("✅ Research system initialized")
         except Exception as e:
-            logger.error(f"❌ Failed to initialize research system: {e}")
+            logger.error(f" Failed to initialize research system: {e}")
             raise HTTPException(status_code=503, detail=f"System initialization failed: {str(e)}")
     
     return research_system
@@ -88,7 +89,6 @@ async def health_check():
     """Health check endpoint"""
     memory_usage = None
     try:
-        import psutil
         process = psutil.Process()
         memory_info = process.memory_info()
         memory_usage = {
@@ -149,7 +149,7 @@ async def start_research(request: ResearchRequest):
         }
         
     except Exception as e:
-        logger.error(f"❌ Research failed: {str(e)}")
+        logger.error(f" Research failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Root API endpoint
@@ -195,10 +195,9 @@ async def internal_error_handler(request, exc):
 @app.on_event("startup")
 async def startup_event():
     """Startup event"""
-    logger.info("🚀 Backend server starting up...")
-    logger.info("✅ Backend server ready")
+    logger.info(" Backend server starting up...")
+    logger.info(" Backend server ready")
 
 if __name__ == "__main__":
-    import uvicorn
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
