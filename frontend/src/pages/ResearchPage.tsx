@@ -82,16 +82,16 @@ const ResearchPage: React.FC = () => {
           setResults(data)
           
           // Update search history with results
-          const historyStatus = data.status === 'success' ? 'success' : 'failed'
+          const historyStatus = data.status === 'completed' ? 'success' : 'failed'
           updateSearchResults(searchId, {
             status: historyStatus,
-            papers_found: data.research_results?.papers?.length || 0,
-            execution_time: data.execution_time_seconds || 0,
+            papers_found: data.research_results?.papers?.length || data.metrics?.papers_found || 0,
+            execution_time: data.metrics?.execution_time_seconds || 0,
             papers: data.research_results?.papers || []
           })
           
           // Automatically show visualization if we have successful results with papers
-          if (data.status === 'success' && data.research_results?.papers && data.research_results.papers.length > 0) {
+          if (data.status === 'completed' && data.research_results?.papers && data.research_results.papers.length > 0) {
             setShowVisualization(true)
           }
         },
@@ -123,7 +123,7 @@ const ResearchPage: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'success': return 'text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400'
+      case 'completed': return 'text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400'
       case 'error': return 'text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400'
       case 'failed_research':
       case 'failed_analysis':
@@ -135,7 +135,7 @@ const ResearchPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success': return <CheckCircle className="w-5 h-5" />
+      case 'completed': return <CheckCircle className="w-5 h-5" />
       case 'error': return <AlertCircle className="w-5 h-5" />
       default: return <Clock className="w-5 h-5" />
     }
@@ -308,22 +308,30 @@ const ResearchPage: React.FC = () => {
               </div>
             </div>
             
-            {results.summary && (
+            {(results.metrics || results.summary) && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center p-3 bg-background rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{results.summary.papers_found}</div>
+                  <div className="text-2xl font-bold text-primary">
+                    {results.metrics?.papers_found || results.summary?.papers_found || 0}
+                  </div>
                   <div className="text-sm text-muted-foreground">Papers Found</div>
                 </div>
                 <div className="text-center p-3 bg-background rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{results.execution_time_seconds?.toFixed(1)}s</div>
+                  <div className="text-2xl font-bold text-primary">
+                    {results.metrics?.execution_time_seconds?.toFixed(1) || '0'}s
+                  </div>
                   <div className="text-sm text-muted-foreground">Analysis Time</div>
                 </div>
                 <div className="text-center p-3 bg-background rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{results.summary.key_insights}</div>
+                  <div className="text-2xl font-bold text-primary">
+                    {results.metrics?.key_insights_count || results.summary?.key_insights || 0}
+                  </div>
                   <div className="text-sm text-muted-foreground">Key Insights</div>
                 </div>
                 <div className="text-center p-3 bg-background rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{results.summary.recommendations}</div>
+                  <div className="text-2xl font-bold text-primary">
+                    {results.metrics?.recommendations_count || results.summary?.recommendations || 0}
+                  </div>
                   <div className="text-sm text-muted-foreground">Recommendations</div>
                 </div>
               </div>
@@ -480,7 +488,7 @@ const ResearchPage: React.FC = () => {
       )}
 
       {/* Visualization Dashboard */}
-      {results && results.status === 'success' && results.research_results?.papers && (
+      {results && results.status === 'completed' && results.research_results?.papers && (
         <div className="space-y-6">
           {/* Visualization Toggle */}
           <div className="bg-card rounded-lg border border-border p-4">
