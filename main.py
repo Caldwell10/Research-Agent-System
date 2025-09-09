@@ -196,7 +196,7 @@ class MultiAgentResearchSystem:
         Returns:
             Research summary dictionary
         """
-        logger.info(f"📋 Getting research summary for: '{query}'")
+        logger.info(f" Getting research summary for: '{query}'")
         
         research_results = self.researcher.research(query)
         
@@ -236,7 +236,7 @@ def main():
         system = MultiAgentResearchSystem(max_papers=5)
         
         # Interactive mode
-        print("\n🎯 System ready! Enter your research queries.")
+        print("\n System ready! Enter your research queries.")
         print("Commands:")
         print("  'quit' or 'exit' - Exit the program")
         print("  'quick [query]' - Quick analysis (3 papers)")
@@ -282,7 +282,7 @@ def main():
                 
                 else:
                     # Full analysis
-                    print(f"\n🔬 Full analysis for: '{query}'")
+                    print(f"\n Full analysis for: '{query}'")
                     print("This may take a few minutes...")
                     
                     result = system.research_topic(query)

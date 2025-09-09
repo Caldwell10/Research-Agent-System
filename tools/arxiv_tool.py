@@ -103,7 +103,14 @@ class ArxivSearchTool:
         
         # Sort by relevance score and return top results
         scored_papers.sort(reverse=True, key=lambda x: x[0])
-        return [paper for score, paper in scored_papers[:max_results] if score > 5]  # Minimum relevance threshold
+        # More lenient threshold 
+        filtered_papers = [paper for score, paper in scored_papers[:max_results] if score > 0]
+        
+        # If still no papers, return top papers regardless of score
+        if not filtered_papers and scored_papers:
+            filtered_papers = [paper for score, paper in scored_papers[:max_results]]
+            
+        return filtered_papers
     
     def _get_relevant_categories(self, query: str) -> List[str]:
         """

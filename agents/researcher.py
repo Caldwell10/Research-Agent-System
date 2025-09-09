@@ -178,9 +178,12 @@ class ResearcherAgent:
             # Step 5: Evaluate each paper
             evaluated_papers = []
             
-            for paper in final_papers:
+            for i, paper in enumerate(final_papers, 1):
                 try:
+                    logger.info(f"🔍 Evaluating paper {i}/{len(final_papers)}: {paper.get('title', 'Unknown')[:50]}...")
                     evaluation = await self._evaluate_paper_async(query, paper)
+                    logger.info(f"✅ Paper {i} evaluation complete - Score: {evaluation.get('relevance_score', 'N/A')}")
+                    
                     paper_with_eval = {
                         **paper,  # Original paper data + enhancements
                         "evaluation": evaluation
@@ -188,12 +191,15 @@ class ResearcherAgent:
                     evaluated_papers.append(paper_with_eval)
                     
                 except Exception as e:
-                    logger.error(f"Error evaluating paper {paper.get('title', 'Unknown')}: {e}")
+                    logger.error(f"❌ Error evaluating paper {paper.get('title', 'Unknown')}: {e}")
                     # Include paper without evaluation rather than skip
                     paper_with_eval = {
                         **paper,
                         "evaluation": {
                             "relevance_score": 5,
+                            "key_contributions": [],
+                            "limitations": [],
+                            "importance": f"Error during evaluation: {str(e)}",
                             "error": str(e)
                         }
                     }

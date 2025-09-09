@@ -138,20 +138,63 @@ async def start_research(request: ResearchRequest):
         
         duration = time.time() - start_time
         
-        # Add progress updates to results
-        results["progress_updates"] = progress_updates
-        results["duration"] = duration
+        # Extract metrics from results
+        papers_found = results.get("papers_analyzed", 0)
+        execution_time = results.get("execution_time_seconds", duration)
         
-        return {
+        # Get insights count safely
+        analysis_results = results.get("analysis_results", {})
+        insights = analysis_results.get("insights", {})
+        key_insights_count = len(insights.get("trending_methods", []))
+        
+        # Get recommendations count
+        report_results = results.get("report", {})
+        recommendations_count = len(report_results.get("recommendations", []))
+        
+        # Build comprehensive response with metrics
+        response = {
             "status": "completed",
-            "results": results,
             "query": request.query,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            "metrics": {
+                "papers_found": papers_found,
+                "execution_time_seconds": round(execution_time, 2),
+                "key_insights_count": key_insights_count,
+                "recommendations_count": recommendations_count,
+                "research_stages_completed": len(progress_updates)
+            },
+            "summary": results.get("summary", {}),
+            "research_results": results.get("research_results", {}),
+            "analysis_results": analysis_results,
+            "report": report_results,
+            "progress_updates": progress_updates,
+            "full_results": results
         }
         
+        return response
+        
     except Exception as e:
-        logger.error(f" Research failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"❌ Research failed: {str(e)}")
+        
+        # Return detailed error response instead of raising exception
+        return {
+            "status": "error",
+            "query": request.query,
+            "timestamp": datetime.now().isoformat(),
+            "error": {
+                "message": str(e),
+                "type": type(e).__name__,
+                "duration": time.time() - start_time if 'start_time' in locals() else 0
+            },
+            "metrics": {
+                "papers_found": 0,
+                "execution_time_seconds": time.time() - start_time if 'start_time' in locals() else 0,
+                "key_insights_count": 0,
+                "recommendations_count": 0,
+                "research_stages_completed": len(progress_updates) if 'progress_updates' in locals() else 0
+            },
+            "progress_updates": progress_updates if 'progress_updates' in locals() else []
+        }
 
 # Root API endpoint
 @app.get("/api/")
