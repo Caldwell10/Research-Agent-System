@@ -46,7 +46,7 @@ class RateLimitedResearchSystem:
             
             papers_found = research_results['papers_found']
             if progress_callback:
-                await progress_callback("researcher", f"✅ Found {papers_found} relevant papers")
+                await progress_callback("researcher", f" Found {papers_found} relevant papers")
             
             # Stage 2: Analysis
             if progress_callback:
@@ -67,11 +67,11 @@ class RateLimitedResearchSystem:
                 }
             
             if progress_callback:
-                await progress_callback("analyzer", "✅ Paper analysis complete")
+                await progress_callback("analyzer", " Paper analysis complete")
             
             # Stage 3: Reporting
             if progress_callback:
-                await progress_callback("reporter", "📝 Generating comprehensive report...")
+                await progress_callback("reporter", " Generating comprehensive report...")
             
             report_results = await self._safe_api_call(
                 self.base_system.reporter.generate_report,
@@ -90,7 +90,7 @@ class RateLimitedResearchSystem:
                 }
             
             if progress_callback:
-                await progress_callback("reporter", "✅ Report generation complete")
+                await progress_callback("reporter", " Report generation complete")
             
             # Calculate execution time
             execution_time = time.time() - start_time

@@ -8,4 +8,4 @@ services:
       - key: PORT
         value: 10000
       - key: GROQ_API_KEY
-        sync: false  # This will be set manually in Render dashboard
+        sync: false 
