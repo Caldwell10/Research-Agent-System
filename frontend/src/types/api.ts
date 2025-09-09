@@ -20,13 +20,25 @@ export interface Paper {
 }
 
 export interface ResearchResults {
-  status: 'success' | 'failed_research' | 'failed_analysis' | 'failed_reporting' | 'error'
+  status: 'completed' | 'error' | 'failed_research' | 'failed_analysis' | 'failed_reporting'
   query: string
-  execution_time_seconds?: number
-  papers_analyzed?: number
-  papers_found?: number
-  message?: string
-  error?: string
+  timestamp: string
+  
+  // New metrics structure from backend
+  metrics?: {
+    papers_found: number
+    execution_time_seconds: number
+    key_insights_count: number
+    recommendations_count: number
+    research_stages_completed: number
+  }
+  
+  // Error information (if status is 'error')
+  error?: {
+    message: string
+    type: string
+    duration: number
+  }
   
   research_results?: {
     status: string
@@ -64,6 +76,14 @@ export interface ResearchResults {
     key_insights: number
     recommendations: number
   }
+  
+  progress_updates?: Array<{
+    stage: string
+    message: string
+    timestamp: string
+  }>
+  
+  full_results?: any
 }
 
 export interface HealthCheck {
