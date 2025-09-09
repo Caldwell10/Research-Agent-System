@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 import time
 import psutil
+import uvicorn
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
