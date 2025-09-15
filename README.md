@@ -1,6 +1,6 @@
 # Multi-Agent Research Tool
 
-A sophisticated AI-powered research assistant that combines three specialized AI agents to provide intelligent research paper analysis and comprehensive insights from academic literature.
+An AI-powered research assistant that combines three specialized AI agents to provide intelligent research paper analysis and comprehensive insights from academic literature.
 
 ## Overview
 
@@ -51,11 +51,11 @@ The Multi-Agent Research Tool is a modern web application featuring a React-base
 
 ### Frontend Architecture
 
-The frontend is built using modern React with TypeScript and follows a component-based architecture:
+The frontend is built using React with TypeScript and follows a component-based architecture:
 
 #### Core Technologies
 - **React**: Component-based UI with hooks and context
-- **TypeScript**: Type-safe development with enhanced IDE support
+- **TypeScript**: Type-safe development
 - **Vite**: Fast build tool and development server
 - **Tailwind CSS**: Utility-first CSS framework for styling
 - **React Router**: Client-side routing for SPA navigation
@@ -80,7 +80,7 @@ The backend is a FastAPI application with WebSocket support and multi-agent orch
 
 #### Core Technologies
 - **FastAPI**: Modern, high-performance web framework
-- **Socket.IO**: Real-time bidirectional communication
+- **Socket.IO**: Real-time communication
 - **Uvicorn**: ASGI server for high-performance async applications
 - **Pydantic**: Data validation and serialization
 
@@ -108,21 +108,6 @@ The system employs three specialized AI agents working in sequence:
 - **Groq LLM**: High-performance language model for analysis and generation
 - **Rate Limiting**: Intelligent API call management and cost optimization
 
-## Frontend-Backend Communication
-
-The system uses HTTP REST API communication with progress tracking:
-
-```
-Frontend                    Backend
-    │                         │
-    │──── POST /api/research ─►│
-    │                         │ ┌─ Three-Agent Process
-    │◄──── HTTP Response ─────│ │ 1. Research papers
-    │       (with progress)    │ │ 2. Analyze content
-    │                         │ │ 3. Generate report
-    │                         │ └─ Return results
-```
-
 ### REST API Endpoints
 
 **Health Check:**
@@ -136,72 +121,32 @@ Frontend                    Backend
 
 ### 1. **Multi-Agent Architecture**
 - **Pattern**: Agent-based distributed system
-- **Implementation**: Specialized agents with distinct responsibilities
-- **Benefits**: Modular, scalable, and maintainable code structure
+- **Implementation**: Specialized agents with distinct research responsibilities
 
 ### 2. **Progress Tracking Pattern**
 - **Pattern**: Embedded progress reporting in HTTP responses
 - **Implementation**: Research system includes progress updates in response data
-- **Benefits**: User feedback without WebSocket complexity
 
 ### 3. **Repository Pattern**
 - **Pattern**: Data access abstraction
 - **Implementation**: API service layer with hooks for data fetching
-- **Benefits**: Centralized data management and caching
 
 ### 4. **Component Composition**
 - **Pattern**: React component composition and render props
 - **Implementation**: Reusable UI components with prop interfaces
-- **Benefits**: Code reusability and maintainable UI architecture
 
 ### 5. **Context Provider Pattern**
 - **Pattern**: Dependency injection for React
 - **Implementation**: Context providers for WebSocket, theme, and global state
-- **Benefits**: Avoid prop drilling and centralized state management
 
 ### 6. **Custom Hook Pattern**
 - **Pattern**: Logic encapsulation and reuse
 - **Implementation**: Custom hooks for research, favorites, progress tracking
-- **Benefits**: Separation of concerns and testable business logic
 
 ### 7. **Command Pattern**
 - **Pattern**: Encapsulating requests as objects
 - **Implementation**: Research actions and agent commands
-- **Benefits**: Undo/redo functionality and request queuing
 
-## Project Structure
-
-```
-Multi-agent Research Tool/
-├── frontend/                    # React TypeScript frontend (AWS Amplify)
-│   ├── src/
-│   │   ├── components/         # Reusable UI components
-│   │   │   ├── charts/        # Data visualization components
-│   │   │   └── __tests__/     # Component tests
-│   │   ├── contexts/          # React context providers
-│   │   ├── hooks/             # Custom React hooks
-│   │   ├── pages/             # Route-level components
-│   │   ├── lib/               # Utilities and configurations
-│   │   ├── types/             # TypeScript type definitions
-│   │   └── test/              # Test utilities and mocks
-│   ├── public/                # Static assets and PWA files
-│   └── package.json           # Frontend dependencies
-├── agents/                     # AI agent implementations
-│   ├── researcher.py          # Paper search and evaluation
-│   ├── analyzer.py            # Content analysis agent
-│   └── reporter.py            # Report generation agent
-├── tools/                      # External API integrations
-│   ├── arxiv_tool.py          # ArXiv API wrapper
-│   └── semantic_scholar_tool.py # Semantic Scholar API
-├── utils/                      # Shared utilities
-│   └── groq_llm.py           # LLM client configuration
-├── backend_server.py          # FastAPI server (Render deployment)
-├── enhanced_research_system.py # Multi-agent orchestration
-├── main.py                    # Core research system
-├── config.py                  # Configuration management
-├── render.yaml               # Render deployment configuration
-└── requirements.txt          # Python dependencies
-```
 
 ## Getting Started
 
@@ -253,7 +198,7 @@ Multi-agent Research Tool/
    ```bash
    npm run dev
    ```
-   Frontend runs on `http://localhost:3001`
+   Frontend runs on `http://localhost:3000`
 
 ## 🧪 Testing
 
@@ -281,8 +226,7 @@ The project includes comprehensive testing:
 - **Unit Tests**: Component and hook testing with Vitest
 - **Integration Tests**: API and WebSocket integration tests
 - **E2E Tests**: End-to-end user flows with Playwright
-- **Accessibility Tests**: WCAG compliance testing
-- **Mobile Responsive Tests**: Cross-device compatibility
+
 
 ## Features
 
@@ -291,25 +235,15 @@ The project includes comprehensive testing:
 - **Intelligent Paper Search**: AI-powered relevance scoring and filtering
 - **Real-time Progress Tracking**: Live updates during research process
 - **Interactive Visualizations**: Charts for relevance scores, publication timelines, and categories
-- **Export Capabilities**: Multiple format support (JSON, PDF, CSV, BibTeX)
 - **Favorites Management**: Save and organize papers with collections
 - **Search History**: Track and revisit previous research queries
-- **Mobile-First Design**: Responsive interface optimized for all devices
-
-### Advanced Features
-
-- **Progressive Web App (PWA)**: Offline capability and installable app
-- **Theme Support**: Dark/light mode with system preference detection
-- **Accessibility**: WCAG 2.1 AA compliance with screen reader support
-- **Performance Optimization**: Code splitting, lazy loading, and caching
-- **Error Boundaries**: Graceful error handling and recovery
 
 ##  Development
 
 ### Available Scripts
 
 **Frontend:**
-- `npm run dev` - Development server with hot reload
+- `npm run dev` - Development server 
 - `npm run build` - Production build
 - `npm run preview` - Preview production build
 - `npm run lint` - Code linting with ESLint
@@ -317,15 +251,7 @@ The project includes comprehensive testing:
 
 **Backend:**
 - `python backend_server.py` - Start FastAPI server
-- `python test_system.py` - Test multi-agent system
 - `python main.py "query"` - Direct CLI research
-
-### Code Quality
-
-- **TypeScript**: Strict type checking enabled
-- **ESLint**: Code quality and style enforcement
-- **Prettier**: Consistent code formatting
-- **Husky**: Pre-commit hooks for quality gates
 
 ## 🏗️ Deployment
 
@@ -345,14 +271,14 @@ The project includes comprehensive testing:
 
 **Backend (Render):**
 ```env
-GROQ_API_KEY=your_groq_api_key_here
+GROQ_API_KEY=your_groq_api_key
 PORT=10000
 ```
 
 **Frontend (Amplify):**
 ```env
-VITE_API_URL=https://your-render-app.onrender.com
-VITE_WS_URL=https://your-render-app.onrender.com
+VITE_API_URL=https://main.dsyejk39ji1ch.amplifyapp.com/
+VITE_WS_URL=https://main.dsyejk39ji1ch.amplifyapp.com/
 ```
 
 ##  Acknowledgments
